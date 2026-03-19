@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Domain-Specific ASR – Audio Submission</title>
-
+<title>Domain-Specific ASR – Sentence Submission</title>
 <style>
 /* ===== Base ===== */
 body {
@@ -19,7 +18,6 @@ body {
 h1, h2, h3 { margin-top: 0; }
 .small { color: #94a3b8; font-size: 0.95rem; }
 code { background: #334155; padding: 2px 6px; border-radius: 8px; color: #f8fafc; }
-
 /* ===== Top Challenges Image ===== */
 .challenges img {
   width: 100%;
@@ -34,7 +32,6 @@ code { background: #334155; padding: 2px 6px; border-radius: 8px; color: #f8fafc
   margin-top: 6px;
   font-style: italic;
 }
-
 /* ===== Demo Table ===== */
 .demo-table-wrapper { overflow-x: auto; margin-top: 20px; }
 .demo-table {
@@ -54,7 +51,6 @@ code { background: #334155; padding: 2px 6px; border-radius: 8px; color: #f8fafc
 .demo-table th { background: #0f172a; color: #f8fafc; font-weight: 600; }
 .demo-table tr:hover { background: #273449; }
 .demo-table audio { width: 180px; }
-
 /* ===== Cards ===== */
 .card {
   background: #1e293b;
@@ -62,7 +58,6 @@ code { background: #334155; padding: 2px 6px; border-radius: 8px; color: #f8fafc
   border-radius: 14px;
   padding: 18px;
 }
-
 /* ===== Buttons ===== */
 .btn {
   display: inline-block;
@@ -83,7 +78,6 @@ code { background: #334155; padding: 2px 6px; border-radius: 8px; color: #f8fafc
 }
 .btn.primary:hover { background: #1d4ed8; }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
 /* ===== Form Fields ===== */
 label { display: block; margin-top: 12px; font-weight: 600; }
 input, select {
@@ -96,7 +90,6 @@ input, select {
   color: #f1f5f9;
 }
 input::placeholder { color: #94a3b8; }
-
 /* ===== Contribute Layout (Sticky Image + Form) ===== */
 .contribute-grid {
   display: grid;
@@ -108,7 +101,6 @@ input::placeholder { color: #94a3b8; }
 @media (min-width: 980px) {
   .contribute-grid { grid-template-columns: 1fr 1.4fr; align-items: start; }
 }
-
 .req-sticky {
   background: #f8fafc;
   border: 1px solid #334155;
@@ -118,22 +110,18 @@ input::placeholder { color: #94a3b8; }
 }
 .req-sticky img { width: 100%; border-radius: 12px; display: block; }
 .req-sticky .image-credit { color: #475569; }
-
 @media (min-width: 980px) {
   .req-sticky {
     position: sticky;
     top: 20px;
-    height:80vh;   /* takes 80% of screen height */
+    height:80vh;
   }
-
   .req-sticky img {
     height: 700px;
     object-fit: contain;
   }
 }
-
 .form-stack .card { margin-bottom: 16px; }
-
 .sentence-group { position: relative; margin-bottom: 12px; }
 .remove-btn {
   position: absolute;
@@ -151,7 +139,6 @@ input::placeholder { color: #94a3b8; }
   padding: 0;
 }
 .remove-btn:hover { background: #dc2626; }
-
 .actions-row {
   display: flex;
   gap: 10px;
@@ -160,16 +147,13 @@ input::placeholder { color: #94a3b8; }
 }
 </style>
 </head>
-
 <body>
-
 <!-- ===== Top Image ===== -->
 <section class="challenges">
   <img src="assets/images/asr_challenges_2.png"
        alt="Domain-aware ASR challenges: lab noise and terminology">
   <p class="image-credit">AI-generated illustration (OpenAI)</p>
 </section>
-
 <!-- ===== Demo Section ===== -->
 <section>
   <h2>Performance of models</h2>
@@ -197,31 +181,24 @@ input::placeholder { color: #94a3b8; }
       </tbody>
     </table>
   </div>
-
   <p class="demo-conclusion">
     It can be seen that noise affects the performance of the model.
   </p>
 </section>
-
 <!-- ===== Contribution Section ===== -->
 <section class="contribute-grid">
-
   <!-- Sticky Image -->
   <aside class="req-sticky">
     <img src="assets/images/domain_asr_requirements_new_3.png"
          alt="We need lab-noise audio and example lab sentences">
     <p class="image-credit">AI-generated illustration (OpenAI)</p>
   </aside>
-
-  <!-- Form + Upload -->
+  <!-- Form -->
   <div class="form-stack">
-
     <div class="card">
       <h2>Step 1 — Your Details</h2>
-
       <label for="email">Email</label>
       <input id="email" type="email" required>
-
       <label for="occupation">Occupation</label>
       <select id="occupation" required>
         <option value="" disabled selected>Select your occupation</option>
@@ -232,95 +209,59 @@ input::placeholder { color: #94a3b8; }
         <option value="industry_researcher">Industry Researcher</option>
         <option value="other">Other</option>
       </select>
-
       <label for="university">University / Organization</label>
       <input id="university" type="text" required>
     </div>
-
     <div class="card">
       <h2>Step 2 — Sentences used in lab</h2>
       <p class="small">
         Provide example sentences you would normally use when documenting
         catalysis synthesis or experimental procedures in your daily lab work.
       </p>
-
       <div id="sentenceContainer">
         <div class="sentence-group">
           <label>Sentence 1</label>
           <input type="text" class="sentence-input">
         </div>
       </div>
-
       <button type="button" class="btn" id="addSentenceBtn" style="margin-top:10px;">
         + Add another sentence
       </button>
-
-      <!-- Button 1: sentences-only -->
       <div class="actions-row">
         <button class="btn primary" id="submitSentencesBtn" type="button">
           Submit sentences
         </button>
       </div>
-
       <p class="small" id="sentencesStatus" style="margin-top:10px;"></p>
     </div>
-
-    <div class="card">
-      <h2>Step 3 — Upload Audio (optional)</h2>
-
-      <label for="audioFiles">Upload up to 10 files (.wav, .mp3), total ≤ 10 MB</label>
-      <input id="audioFiles" type="file" multiple accept=".wav,.mp3">
-
-      <p class="small" id="sizeHint" style="margin-top:8px;"></p>
-      <p class="small">If you don’t want to upload audio, you can skip this step.</p>
-
-      <!-- Button 2: audio-only -->
-      <button class="btn primary" id="submitAudioBtn" type="button" style="margin-top:12px;">
-        Submit audio
-      </button>
-
-      <p class="small" id="audioStatus" style="margin-top:10px;"></p>
-    </div>
-
     <div class="card" style="margin-top:12px; background:#0f172a; border:1px solid #334155;">
       <h3 style="margin:0 0 8px 0;">Data use & privacy notice</h3>
       <p class="small" style="margin:0;">
-        By uploading, you agree that your <b>audio recordings</b> and <b> sentences</b> may be used to
+        By submitting, you agree that your <b>sentences</b> may be used to
         train and evaluate speech recognition models for research purposes.
-        Your recordings and sentences will <b>not</b> be published as part of the released public model.
+        Your sentences will <b>not</b> be published as part of the released public model.
         We will store and process your contribution in an <b>anonymized</b> form and keep it confidential.
         <br><br>
         Your <b>email</b> and <b>organization</b> are collected only for submission tracking and potential follow-up;
         they are <b>not</b> used for model training and are not shared publicly.
       </p>
     </div>
-
   </div>
 </section>
-
 <script>
 // ===== API endpoints
-const API_BASE               = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
-const PRESIGN_ENDPOINT       = API_BASE + "/presign";
-const SUBMIT_TEXT_ENDPOINT   = API_BASE + "/submit_text";
-const SUBMIT_AUDIO_ENDPOINT  = API_BASE + "/submit_audio";
-
-// ===== Audio constraints
-const MAX_FILES = 10;
-const MAX_TOTAL_BYTES = 10 * 1024 * 1024;
-const ALLOWED_EXT = new Set(["wav","mp3"]);
+const API_BASE             = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
+const SUBMIT_TEXT_ENDPOINT = API_BASE + "/submit_text";
 
 function makeId() {
   const d = new Date();
   const rand = Math.random().toString(16).slice(2,8).toUpperCase();
   return `FAU-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${rand}`;
 }
-
-const sid = makeId(); // reused for both submissions
+const sid = makeId();
 
 /* ===== Dynamic sentence fields ===== */
 const container = document.getElementById("sentenceContainer");
-
 function updateLabels() {
   container.querySelectorAll(".sentence-group").forEach((group, i) => {
     group.querySelector("label").textContent = `Sentence ${i + 1}`;
@@ -334,7 +275,6 @@ function updateLabels() {
     }
   });
 }
-
 document.getElementById("addSentenceBtn").addEventListener("click", () => {
   const wrapper = document.createElement("div");
   wrapper.className = "sentence-group";
@@ -342,7 +282,6 @@ document.getElementById("addSentenceBtn").addEventListener("click", () => {
   container.appendChild(wrapper);
   updateLabels();
 });
-
 updateLabels();
 
 /* ===== Helpers ===== */
@@ -350,147 +289,47 @@ function collectDetailsOrAlert() {
   const email      = document.getElementById("email").value.trim();
   const occupation = document.getElementById("occupation").value;
   const university = document.getElementById("university").value.trim();
-
   if (!email || !occupation || !university) {
     alert("Please complete Step 1 (Email, Occupation, University/Organization).");
     return null;
   }
   return { submission_id: sid, email, occupation, university };
 }
-
 function collectSentences() {
   return [...document.querySelectorAll(".sentence-input")]
     .map(i => i.value.trim())
     .filter(Boolean);
 }
 
-/* ===== File size hint ===== */
-const audioInput = document.getElementById("audioFiles");
-const sizeHint   = document.getElementById("sizeHint");
-
-audioInput.addEventListener("change", () => {
-  const files = [...audioInput.files];
-  const total = files.reduce((s, f) => s + f.size, 0);
-  sizeHint.textContent = files.length
-    ? `Selected: ${files.length} file(s), ${(total/1024/1024).toFixed(2)} MB / 10 MB` : "";
-});
-
 /* ==========================================================
-   Button 1: Submit sentences ONLY  -> POST /submit
+   Submit sentences -> POST /submit_text
    ========================================================== */
 document.getElementById("submitSentencesBtn").addEventListener("click", async () => {
   const status = document.getElementById("sentencesStatus");
   const btn    = document.getElementById("submitSentencesBtn");
   status.textContent = "";
-
   const details = collectDetailsOrAlert();
   if (!details) return;
-
   const sentences = collectSentences();
   if (!sentences.length) {
-    alert("Please enter at least one sentence (or skip this step).");
+    alert("Please enter at least one sentence.");
     return;
   }
-
   btn.disabled = true;
   try {
     status.textContent = "Submitting sentences…";
-
-    // JSON #1 (sentences only)
     const payload = {
       ...details,
       sentences,
       timestamp: new Date().toISOString()
     };
-
     const r = await fetch(SUBMIT_TEXT_ENDPOINT, {
       method: "POST",
       headers: {"content-type":"application/json"},
       body: JSON.stringify(payload)
     });
-
     if (!r.ok) throw new Error(await r.text());
-    status.textContent = "Sentences submitted. Thank you";
-  } catch (e) {
-    console.error(e);
-    status.textContent = "Failed ❌ " + (e?.message ?? e);
-  } finally {
-    btn.disabled = false;
-  }
-});
-
-/* ==========================================================
-   Button 2: Submit audio ONLY -> POST /presign, upload to S3,
-            then POST /submit
-   ========================================================== */
-document.getElementById("submitAudioBtn").addEventListener("click", async () => {
-  const status = document.getElementById("audioStatus");
-  const btn    = document.getElementById("submitAudioBtn");
-  status.textContent = "";
-
-  const details = collectDetailsOrAlert();
-  if (!details) return;
-
-  const files = [...audioInput.files];
-  if (!files.length)            { alert("Please select audio files (or skip this step)."); return; }
-  if (files.length > MAX_FILES) { alert("Max 10 files."); return; }
-
-  const total = files.reduce((s, f) => s + f.size, 0);
-  if (total > MAX_TOTAL_BYTES) { alert("Total size must be ≤ 10 MB."); return; }
-
-  let descriptors;
-  try {
-    descriptors = files.map(f => {
-      const ext = f.name.split(".").pop().toLowerCase();
-      if (!ALLOWED_EXT.has(ext)) throw new Error("Not allowed: " + f.name);
-      return { ext, content_type: f.type || "application/octet-stream", size: f.size };
-    });
-  } catch (e) {
-    alert(e.message);
-    return;
-  }
-
-  btn.disabled = true;
-  try {
-    status.textContent = "Requesting upload permissions…";
-    const r = await fetch(PRESIGN_ENDPOINT, {
-      method: "POST",
-      headers: {"content-type":"application/json"},
-      body: JSON.stringify({ submission_id: sid, files: descriptors })
-    });
-    if (!r.ok) throw new Error(await r.text());
-    const { presigns } = await r.json();
-
-    const audio_keys = [];
-    for (let i = 0; i < files.length; i++) {
-      status.textContent = `Uploading ${i+1}/${files.length}…`;
-      const { key, upload } = presigns[i];
-      const fd = new FormData();
-      Object.entries(upload.fields).forEach(([k,v]) => fd.append(k, v));
-      fd.append("file", files[i]);
-
-      const up = await fetch(upload.url, { method: "POST", body: fd });
-      if (!up.ok) throw new Error(`Upload failed for file ${i+1}`);
-      audio_keys.push(key);
-    }
-
-    status.textContent = "Submitting audio metadata…";
-
-    // JSON #2 (audio only)
-    const payload = {
-      ...details,
-      audio_keys,
-      timestamp: new Date().toISOString()
-    };
-
-    const s = await fetch(SUBMIT_AUDIO_ENDPOINT, {
-      method: "POST",
-      headers: {"content-type":"application/json"},
-      body: JSON.stringify(payload)
-    });
-    if (!s.ok) throw new Error(await s.text());
-
-    status.textContent = "Audio submitted Thank you!";
+    status.textContent = "Sentences submitted. Thank you!";
   } catch (e) {
     console.error(e);
     status.textContent = "Failed ❌ " + (e?.message ?? e);
@@ -499,6 +338,5 @@ document.getElementById("submitAudioBtn").addEventListener("click", async () => 
   }
 });
 </script>
-
 </body>
 </html>
