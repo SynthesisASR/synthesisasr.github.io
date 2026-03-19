@@ -114,7 +114,7 @@ input::placeholder { color: #94a3b8; }
   .req-sticky {
     position: sticky;
     top: 20px;
-    height:80vh;
+    height: 80vh;
   }
   .req-sticky img {
     height: 700px;
@@ -148,12 +148,24 @@ input::placeholder { color: #94a3b8; }
 </style>
 </head>
 <body>
+
 <!-- ===== Top Image ===== -->
 <section class="challenges">
   <img src="assets/images/asr_challenges_2.png"
        alt="Domain-aware ASR challenges: lab noise and terminology">
   <p class="image-credit">AI-generated illustration (OpenAI)</p>
 </section>
+
+<!-- ===== Submission Counter ===== -->
+<section style="text-align:center; margin: 30px 0;">
+  <div class="card" style="display:inline-block; padding: 24px 48px;">
+    <p class="small" style="margin:0 0 6px 0;">Total Uploads</p>
+    <p id="counterDisplay" style="font-size: 2.8rem; font-weight: 700; margin: 0; color: #60a5fa;">
+      —
+    </p>
+  </div>
+</section>
+
 <!-- ===== Demo Section ===== -->
 <section>
   <h2>Performance of models</h2>
@@ -185,6 +197,7 @@ input::placeholder { color: #94a3b8; }
     It can be seen that noise affects the performance of the model.
   </p>
 </section>
+
 <!-- ===== Contribution Section ===== -->
 <section class="contribute-grid">
   <!-- Sticky Image -->
@@ -248,10 +261,12 @@ input::placeholder { color: #94a3b8; }
     </div>
   </div>
 </section>
+
 <script>
-// ===== API endpoints
-const API_BASE             = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
+// ===== API endpoints — fill in your API_BASE =====
+const API_BASE             = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";  //  add your API base URL here
 const SUBMIT_TEXT_ENDPOINT = API_BASE + "/submit_text";
+const GET_COUNT_ENDPOINT   = API_BASE + "/get_count";
 
 function makeId() {
   const d = new Date();
@@ -259,6 +274,19 @@ function makeId() {
   return `FAU-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${rand}`;
 }
 const sid = makeId();
+
+/* ===== Counter ===== */
+async function loadCounter() {
+  try {
+    const r = await fetch(GET_COUNT_ENDPOINT);
+    if (!r.ok) throw new Error();
+    const data = await r.json();
+    document.getElementById("counterDisplay").textContent = data.count;
+  } catch {
+    document.getElementById("counterDisplay").textContent = "—";
+  }
+}
+loadCounter(); // load on page open
 
 /* ===== Dynamic sentence fields ===== */
 const container = document.getElementById("sentenceContainer");
@@ -301,9 +329,7 @@ function collectSentences() {
     .filter(Boolean);
 }
 
-/* ==========================================================
-   Submit sentences -> POST /submit_text
-   ========================================================== */
+/* ===== Submit sentences ===== */
 document.getElementById("submitSentencesBtn").addEventListener("click", async () => {
   const status = document.getElementById("sentencesStatus");
   const btn    = document.getElementById("submitSentencesBtn");
@@ -330,6 +356,7 @@ document.getElementById("submitSentencesBtn").addEventListener("click", async ()
     });
     if (!r.ok) throw new Error(await r.text());
     status.textContent = "Sentences submitted. Thank you!";
+    loadCounter(); // 👈 refresh counter after successful submission
   } catch (e) {
     console.error(e);
     status.textContent = "Failed ❌ " + (e?.message ?? e);
