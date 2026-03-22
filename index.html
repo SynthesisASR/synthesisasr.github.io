@@ -130,16 +130,6 @@ input::placeholder { color: #94a3b8; }
   <p class="image-credit">AI-generated illustration (OpenAI)</p>
 </section>
 
-<!-- ===== Submission Counter ===== -->
-<section style="text-align:center; margin: 30px 0;">
-  <div class="card" style="display:inline-block; padding: 24px 48px;">
-    <p class="small" style="margin:0 0 6px 0;">Total Uploads</p>
-    <p id="counterDisplay" style="font-size: 2.8rem; font-weight: 700; margin: 0; color: #60a5fa;">
-      —
-    </p>
-  </div>
-</section>
-
 <!-- ===== Demo Section ===== -->
 <section>
   <h2>Performance of models</h2>
@@ -226,6 +216,16 @@ input::placeholder { color: #94a3b8; }
         they are <b>not</b> used for model training and are not shared publicly.
       </p>
     </div>
+  </div>
+</section>
+
+<!-- ===== Submission Counter ===== -->
+<section style="text-align:center; margin: 40px 0;">
+  <div class="card" style="display:inline-block; padding: 24px 48px;">
+    <p class="small" style="margin:0 0 6px 0;">Total Uploads</p>
+    <p id="counterDisplay" style="font-size: 2.8rem; font-weight: 700; margin: 0; color: #60a5fa;">
+      —
+    </p>
   </div>
 </section>
 
@@ -326,7 +326,7 @@ document.getElementById("submitSentencesBtn").addEventListener("click", async ()
     loadCounter(); // 👈 refresh counter after successful submission
   } catch (e) {
     console.error(e);
-    status.textContent = "Failed  " + (e?.message ?? e);
+    status.textContent = "Failed ❌ " + (e?.message ?? e);
   } finally {
     btn.disabled = false;
   }
