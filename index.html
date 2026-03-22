@@ -136,10 +136,44 @@ body {
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.2;
+  margin-bottom: 28px;
   background: linear-gradient(90deg, var(--text) 40%, var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ===== Full-viewport hero screen ===== */
+.hero-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 0 32px;
+}
+
+/* ===== Scroll hint ===== */
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: bob 2.5s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50%       { transform: translateY(6px); opacity: 1; }
+}
+.scroll-arrow { color: var(--accent); }
+
+/* ===== Main scrollable content ===== */
+.main-content {
+  padding-top: 32px;
 }
 
 /* ===== Hero ===== */
@@ -541,21 +575,32 @@ select option { background: #111118; }
 
 <div class="page">
 
-  <div class="page-title fade-up" style="margin-bottom: 28px;">
-    <h1>Let's make a Synthesis specific<br>speech recognition model</h1>
-  </div>
-
-  <div class="hero fade-up d1">
-    <img src="assets/images/asr_challenges_4.png" alt="Domain-aware ASR challenges">
-    <span class="hero-tag">ASR Research · FAU</span>
-  </div>
-  <p class="image-credit fade-up d1">AI-generated illustration · OpenAI</p>
-
-  <section class="demo-section fade-up d2">
-    <div class="section-heading">
-      <h2>Model Performance</h2>
-      <span class="tag">Demo</span>
+  <!-- ===== Full-viewport hero ===== -->
+  <div class="hero-screen">
+    <div class="page-title fade-up">
+      <h1>Let's make a Synthesis specific<br>speech recognition model</h1>
     </div>
+    <div class="hero fade-up d1">
+      <img src="assets/images/asr_challenges_4.png" alt="Domain-aware ASR challenges">
+      <span class="hero-tag">ASR Research · FAU</span>
+    </div>
+    <p class="image-credit fade-up d2">AI-generated illustration · OpenAI</p>
+    <div class="scroll-hint fade-up d3">
+      <span>Scroll to explore</span>
+      <div class="scroll-arrow">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v14M2 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Scrollable content ===== -->
+  <div class="main-content">
+
+    <section class="demo-section">
+      <div class="section-heading">
+        <h2>Model Performance</h2>
+        <span class="tag">Demo</span>
+      </div>
     <div class="table-wrap">
       <table class="demo-table">
         <thead>
@@ -669,6 +714,7 @@ select option { background: #111118; }
 
     </div>
   </section>
+  </div><!-- end .main-content -->
 </div>
 
 <script>
