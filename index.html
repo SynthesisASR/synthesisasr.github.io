@@ -4,220 +4,671 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Domain-Specific ASR – Sentence Submission</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ===== Base ===== */
-body {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  max-width: 1150px;
-  margin: 40px auto;
-  padding: 0 16px;
-  line-height: 1.5;
-  background: #0f172a;
-  color: #f1f5f9;
+/* ===== Variables ===== */
+:root {
+  --bg:        #070b14;
+  --bg2:       #0c1220;
+  --bg3:       #111827;
+  --border:    rgba(148,163,184,0.1);
+  --border2:   rgba(148,163,184,0.18);
+  --text:      #e8edf5;
+  --muted:     #7a8ba3;
+  --accent:    #4f9cf9;
+  --accent2:   #a78bfa;
+  --gold:      #c9a96e;
+  --success:   #34d399;
+  --danger:    #f87171;
+  --radius:    16px;
+  --radius-sm: 10px;
 }
-h1, h2, h3 { margin-top: 0; }
-.small { color: #94a3b8; font-size: 0.95rem; }
-code { background: #334155; padding: 2px 6px; border-radius: 8px; color: #f8fafc; }
-/* ===== Top Challenges Image ===== */
-.challenges img {
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle grain texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* Ambient glow blobs */
+body::after {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: -200px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(79,156,249,0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.fade-up { animation: fadeUp 0.7s ease both; }
+.fade-up:nth-child(1) { animation-delay: 0.05s; }
+.fade-up:nth-child(2) { animation-delay: 0.15s; }
+.fade-up:nth-child(3) { animation-delay: 0.25s; }
+.fade-up:nth-child(4) { animation-delay: 0.35s; }
+
+/* ===== Hero Banner ===== */
+.hero {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 56px;
+  border: 1px solid var(--border2);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+}
+.hero img {
   width: 100%;
-  border-radius: 14px;
-  border: 1px solid #334155;
   display: block;
+  border-radius: 20px;
+  filter: brightness(0.88) saturate(1.1);
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(7,11,20,0.15) 0%,
+    rgba(7,11,20,0.02) 50%,
+    rgba(7,11,20,0.35) 100%
+  );
+  border-radius: 20px;
 }
 .image-credit {
   text-align: right;
-  font-size: 0.85rem;
-  color: #94a3b8;
-  margin-top: 6px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 8px;
   font-style: italic;
+  letter-spacing: 0.02em;
 }
+
+/* ===== Section Title ===== */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 3px;
+  height: 22px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent2));
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.section-label h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
 /* ===== Demo Table ===== */
-.demo-table-wrapper { overflow-x: auto; margin-top: 20px; }
+.demo-section { margin-bottom: 56px; }
+
+.demo-table-wrapper { overflow-x: auto; border-radius: var(--radius); }
 .demo-table {
   width: 100%;
-  border-collapse: collapse;
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
   overflow: hidden;
 }
-.demo-table th, .demo-table td {
-  padding: 14px;
+.demo-table thead tr {
+  background: linear-gradient(90deg, rgba(79,156,249,0.08), rgba(167,139,250,0.06));
+}
+.demo-table th {
+  padding: 14px 20px;
   text-align: left;
-  border-bottom: 1px solid #334155;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border2);
+}
+.demo-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
   vertical-align: middle;
 }
-.demo-table th { background: #0f172a; color: #f8fafc; font-weight: 600; }
-.demo-table tr:hover { background: #273449; }
-.demo-table audio { width: 180px; }
-/* ===== Cards ===== */
-.card {
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 14px;
-  padding: 18px;
+.demo-table tbody tr:last-child td { border-bottom: none; }
+.demo-table tbody tr {
+  transition: background 0.2s ease;
 }
-/* ===== Buttons ===== */
-.btn {
+.demo-table tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+/* Training badge */
+.badge {
   display: inline-block;
-  padding: 12px 16px;
-  border-radius: 12px;
-  text-decoration: none;
-  border: 1px solid #475569;
-  background: #1e293b;
-  color: #f1f5f9;
-  transition: all 0.2s ease;
-  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: rgba(79,156,249,0.1);
+  border: 1px solid rgba(79,156,249,0.2);
+  color: var(--accent);
 }
-.btn:hover { background: #334155; }
-.btn.primary {
-  background: #2563eb;
-  border: 1px solid #2563eb;
+.badge.purple {
+  background: rgba(167,139,250,0.1);
+  border-color: rgba(167,139,250,0.2);
+  color: var(--accent2);
+}
+
+/* Transcription text */
+.transcription {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text);
+}
+.transcription.error { color: #f87171; }
+.transcription.correct { color: var(--success); }
+
+audio {
+  width: 200px;
+  height: 32px;
+  border-radius: 20px;
+  outline: none;
+  filter: opacity(0.9);
+}
+audio::-webkit-media-controls-panel {
+  background: var(--bg3);
+  border-radius: 20px;
+}
+
+/* ===== Form Cards ===== */
+.form-section { display: flex; flex-direction: column; gap: 16px; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(79,156,249,0.3), transparent);
+}
+.card:focus-within {
+  border-color: rgba(79,156,249,0.3);
+  box-shadow: 0 0 0 1px rgba(79,156,249,0.1), 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.step-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: white;
+  flex-shrink: 0;
 }
-.btn.primary:hover { background: #1d4ed8; }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.card-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
 /* ===== Form Fields ===== */
-label { display: block; margin-top: 12px; font-weight: 600; }
-input, select {
+.field { margin-bottom: 18px; }
+.field:last-of-type { margin-bottom: 0; }
+
+label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="email"],
+select {
   width: 100%;
   box-sizing: border-box;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #334155;
-  margin-top: 6px;
-  background: #0f172a;
-  color: #f1f5f9;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: rgba(7,11,20,0.6);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  outline: none;
+  -webkit-appearance: none;
 }
-input::placeholder { color: #94a3b8; }
-/* ===== Contribute Layout (full page width) ===== */
-.contribute-section {
-  margin: 40px 0;
+input::placeholder { color: rgba(122,139,163,0.5); }
+input:focus, select:focus {
+  border-color: rgba(79,156,249,0.5);
+  box-shadow: 0 0 0 3px rgba(79,156,249,0.08);
 }
-.form-stack .card { margin-bottom: 16px; }
-.sentence-group { position: relative; margin-bottom: 12px; }
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237a8ba3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+select option { background: var(--bg3); }
+
+/* ===== Sentence fields ===== */
+.hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: rgba(79,156,249,0.04);
+  border: 1px solid rgba(79,156,249,0.1);
+  border-radius: var(--radius-sm);
+}
+
+.sentence-group {
+  position: relative;
+  margin-bottom: 10px;
+}
+.sentence-group input {
+  padding-right: 44px;
+}
 .remove-btn {
   position: absolute;
   right: 10px;
-  top: 60%;
-  background: #ef4444;
-  border: none;
-  color: white;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(248,113,113,0.12);
+  border: 1px solid rgba(248,113,113,0.2);
+  color: var(--danger);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
-  font-size: 14px;
-  line-height: 20px;
-  padding: 0;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
-.remove-btn:hover { background: #dc2626; }
-.actions-row {
+.remove-btn:hover {
+  background: rgba(248,113,113,0.25);
+  border-color: rgba(248,113,113,0.4);
+}
+
+/* ===== Buttons ===== */
+.btn-row {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.btn:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--border2);
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  border: 1px solid rgba(99,102,241,0.4);
+  color: white;
+  font-weight: 500;
+  padding: 12px 24px;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.25);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8, #4338ca);
+  box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+  transform: translateY(-2px);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.status-msg {
+  font-size: 0.85rem;
   margin-top: 12px;
+  min-height: 20px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-msg.success { color: var(--success); }
+.status-msg.error   { color: var(--danger); }
+
+/* ===== Counter Card ===== */
+.counter-card {
+  background: linear-gradient(135deg, rgba(79,156,249,0.06), rgba(167,139,250,0.06));
+  border: 1px solid rgba(79,156,249,0.15);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.counter-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(79,156,249,0.15), rgba(167,139,250,0.15));
+  border: 1px solid rgba(79,156,249,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.counter-info { flex: 1; }
+.counter-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.counter-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 300;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ===== Privacy Card ===== */
+.privacy-card {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+}
+.privacy-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.privacy-card p {
+  font-size: 0.83rem;
+  color: rgba(122,139,163,0.85);
+  line-height: 1.7;
+}
+.privacy-card b { color: rgba(232,237,245,0.7); font-weight: 500; }
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #4a5568; }
+
+/* ===== Divider ===== */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  margin: 48px 0;
 }
 </style>
 </head>
 <body>
+<div class="page-wrapper">
 
-<!-- ===== Top Image ===== -->
-<section class="challenges">
-  <img src="assets/images/asr_challenges_4.png"
-       alt="Domain-aware ASR challenges: lab noise and terminology">
-  <p class="image-credit">AI-generated illustration (OpenAI)</p>
-</section>
-
-<!-- ===== Demo Section ===== -->
-<section>
-  <h2>Performance of models</h2>
-  <div class="demo-table-wrapper">
-    <table class="demo-table">
-      <thead>
-        <tr><th>Traning dataset</th><th>Input audio</th><th>Output transcription</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Without domain dataset</td>
-          <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
-          <td>atalisis is great</td>    
-        </tr>
-        <tr>
-          <td>Daily life conversations + Catalysis text</td>
-          <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
-          <td>catalysis is great</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- ===== Hero ===== -->
+  <div class="hero fade-up">
+    <img src="assets/images/asr_challenges_4.png"
+         alt="Domain-aware ASR challenges: lab noise and terminology">
+    <div class="hero-overlay"></div>
   </div>
-</section>
+  <p class="image-credit fade-up">AI-generated illustration · OpenAI</p>
 
-<!-- ===== Contribution Section ===== -->
-<section class="contribute-section">
-  <div class="form-stack">
-    <div class="card">
-      <h2>Step 1 — Your Details</h2>
-      <label for="email">Email</label>
-      <input id="email" type="email" required>
-      <label for="occupation">Occupation</label>
-      <select id="occupation" required>
-        <option value="" disabled selected>Select your occupation</option>
-        <option value="phd_student">PhD Student</option>
-        <option value="postdoc">Postdoc</option>
-        <option value="professor">Professor</option>
-        <option value="engineer">Engineer</option>
-        <option value="industry_researcher">Industry Researcher</option>
-        <option value="other">Other</option>
-      </select>
-      <label for="university">University / Organization</label>
-      <input id="university" type="text" required>
+  <div class="divider"></div>
+
+  <!-- ===== Demo Section ===== -->
+  <section class="demo-section fade-up">
+    <div class="section-label">
+      <h2>Model Performance</h2>
     </div>
-    <div class="card">
-      <h2>Step 2 — Sentences used in lab</h2>
-      <p class="small">
-        Provide example sentences you would normally use when documenting
-        catalysis synthesis or experimental procedures in your daily lab work.
-      </p>
-      <div id="sentenceContainer">
-        <div class="sentence-group">
-          <label>Sentence 1</label>
-          <input type="text" class="sentence-input">
+    <div class="demo-table-wrapper">
+      <table class="demo-table">
+        <thead>
+          <tr>
+            <th>Training Dataset</th>
+            <th>Input Audio</th>
+            <th>Output Transcription</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">General corpus</span></td>
+            <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
+            <td><span class="transcription error">atalisis is great</span></td>
+          </tr>
+          <tr>
+            <td><span class="badge purple">General + Catalysis text</span></td>
+            <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
+            <td><span class="transcription correct">catalysis is great</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== Contribution Section ===== -->
+  <section>
+    <div class="section-label" style="margin-bottom:28px;">
+      <h2>Contribute to the Dataset</h2>
+    </div>
+
+    <div class="form-section">
+
+      <!-- Step 1 -->
+      <div class="card fade-up">
+        <div class="card-header">
+          <div class="step-badge">1</div>
+          <h2>Your Details</h2>
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input id="email" type="email" placeholder="you@university.edu" required>
+        </div>
+        <div class="field">
+          <label for="occupation">Occupation</label>
+          <select id="occupation" required>
+            <option value="" disabled selected>Select your role</option>
+            <option value="phd_student">PhD Student</option>
+            <option value="postdoc">Postdoc</option>
+            <option value="professor">Professor</option>
+            <option value="engineer">Engineer</option>
+            <option value="industry_researcher">Industry Researcher</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="university">University / Organization</label>
+          <input id="university" type="text" placeholder="e.g. FAU Erlangen-Nürnberg" required>
         </div>
       </div>
-      <button type="button" class="btn" id="addSentenceBtn" style="margin-top:10px;">
-        + Add another sentence
-      </button>
-      <div class="actions-row">
-        <button class="btn primary" id="submitSentencesBtn" type="button">
-          Submit sentences
-        </button>
+
+      <!-- Step 2 -->
+      <div class="card fade-up">
+        <div class="card-header">
+          <div class="step-badge">2</div>
+          <h2>Lab Sentences</h2>
+        </div>
+        <p class="hint">
+          Provide example sentences you would use when documenting catalysis synthesis
+          or experimental procedures in your daily lab work.
+        </p>
+        <div id="sentenceContainer">
+          <div class="sentence-group">
+            <label>Sentence 1</label>
+            <input type="text" class="sentence-input" placeholder="e.g. The catalyst was calcined at 500°C for 4 hours.">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn" id="addSentenceBtn">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Add sentence
+          </button>
+          <button class="btn btn-primary" id="submitSentencesBtn" type="button">
+            Submit contribution
+          </button>
+        </div>
+        <p class="status-msg" id="sentencesStatus"></p>
       </div>
-      <p class="small" id="sentencesStatus" style="margin-top:10px;"></p>
+
+      <!-- Counter -->
+      <div class="counter-card fade-up">
+        <div class="counter-icon">📊</div>
+        <div class="counter-info">
+          <div class="counter-label">Total sentence uploads</div>
+          <div class="counter-value" id="counterDisplay">—</div>
+        </div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          Live count
+        </div>
+      </div>
+
+      <!-- Privacy -->
+      <div class="privacy-card fade-up">
+        <h3>
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1L2 3.5V7c0 3.3 2.3 6.4 5.5 7.5C10.7 13.4 13 10.3 13 7V3.5L7.5 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          Data use &amp; privacy notice
+        </h3>
+        <p>
+          By submitting, you agree that your <b>sentences</b> may be used to train and evaluate speech
+          recognition models for research purposes. Your sentences will <b>not</b> be published as part
+          of the released public model. We will store and process your contribution in an <b>anonymized</b>
+          form and keep it confidential.<br><br>
+          Your <b>email</b> and <b>organization</b> are collected only for submission tracking and
+          potential follow-up; they are <b>not</b> used for model training and are not shared publicly.
+        </p>
+      </div>
+
     </div>
-    <div class="card" style="margin-top:12px; text-align:center; padding: 24px 48px;">
-      <p class="small" style="margin:0 0 6px 0;">Total Uploads till now</p>
-      <p id="counterDisplay" style="font-size: 2.8rem; font-weight: 700; margin: 0; color: #60a5fa;">—</p>
-    </div>
-    <div class="card" style="margin-top:12px; background:#0f172a; border:1px solid #334155;">
-      <h3 style="margin:0 0 8px 0;">Data use & privacy notice</h3>
-      <p class="small" style="margin:0;">
-        By submitting, you agree that your <b>sentences</b> may be used to
-        train and evaluate speech recognition models for research purposes.
-        Your sentences will <b>not</b> be published as part of the released public model.
-        We will store and process your contribution in an <b>anonymized</b> form and keep it confidential.
-        <br><br>
-        Your <b>email</b> and <b>organization</b> are collected only for submission tracking and potential follow-up;
-        they are <b>not</b> used for model training and are not shared publicly.
-      </p>
-    </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <script>
-// ===== API endpoints — fill in your API_BASE =====
-const API_BASE             = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";  //  add your API base URL here
+const API_BASE             = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
 const SUBMIT_TEXT_ENDPOINT = API_BASE + "/submit_text";
 const GET_COUNT_ENDPOINT   = API_BASE + "/get_count";
 
@@ -228,7 +679,6 @@ function makeId() {
 }
 const sid = makeId();
 
-/* ===== Counter ===== */
 async function loadCounter() {
   try {
     const r = await fetch(GET_COUNT_ENDPOINT);
@@ -239,9 +689,8 @@ async function loadCounter() {
     document.getElementById("counterDisplay").textContent = "—";
   }
 }
-loadCounter(); // load on page open
+loadCounter();
 
-/* ===== Dynamic sentence fields ===== */
 const container = document.getElementById("sentenceContainer");
 function updateLabels() {
   container.querySelectorAll(".sentence-group").forEach((group, i) => {
@@ -249,23 +698,27 @@ function updateLabels() {
     let btn = group.querySelector(".remove-btn");
     if (i === 0) { btn?.remove(); return; }
     if (!btn) {
-      btn = Object.assign(document.createElement("button"),
-        {type:"button", className:"remove-btn", textContent:"×"});
+      btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "remove-btn";
+      btn.textContent = "×";
       btn.addEventListener("click", () => { group.remove(); updateLabels(); });
       group.appendChild(btn);
     }
   });
 }
+
 document.getElementById("addSentenceBtn").addEventListener("click", () => {
+  const count = container.querySelectorAll(".sentence-group").length + 1;
   const wrapper = document.createElement("div");
   wrapper.className = "sentence-group";
-  wrapper.innerHTML = `<label>Sentence</label><input type="text" class="sentence-input">`;
+  wrapper.innerHTML = `<label>Sentence ${count}</label><input type="text" class="sentence-input" placeholder="Type a lab sentence…">`;
   container.appendChild(wrapper);
   updateLabels();
+  wrapper.querySelector("input").focus();
 });
 updateLabels();
 
-/* ===== Helpers ===== */
 function collectDetailsOrAlert() {
   const email      = document.getElementById("email").value.trim();
   const occupation = document.getElementById("occupation").value;
@@ -278,41 +731,37 @@ function collectDetailsOrAlert() {
 }
 function collectSentences() {
   return [...document.querySelectorAll(".sentence-input")]
-    .map(i => i.value.trim())
-    .filter(Boolean);
+    .map(i => i.value.trim()).filter(Boolean);
 }
 
-/* ===== Submit sentences ===== */
 document.getElementById("submitSentencesBtn").addEventListener("click", async () => {
-  const status = document.getElementById("sentencesStatus");
-  const btn    = document.getElementById("submitSentencesBtn");
-  status.textContent = "";
+  const statusEl = document.getElementById("sentencesStatus");
+  const btn      = document.getElementById("submitSentencesBtn");
+  statusEl.textContent = "";
+  statusEl.className = "status-msg";
+
   const details = collectDetailsOrAlert();
   if (!details) return;
   const sentences = collectSentences();
-  if (!sentences.length) {
-    alert("Please enter at least one sentence.");
-    return;
-  }
+  if (!sentences.length) { alert("Please enter at least one sentence."); return; }
+
   btn.disabled = true;
+  statusEl.textContent = "Submitting…";
+
   try {
-    status.textContent = "Submitting sentences…";
-    const payload = {
-      ...details,
-      sentences,
-      timestamp: new Date().toISOString()
-    };
     const r = await fetch(SUBMIT_TEXT_ENDPOINT, {
       method: "POST",
-      headers: {"content-type":"application/json"},
-      body: JSON.stringify(payload)
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ...details, sentences, timestamp: new Date().toISOString() })
     });
     if (!r.ok) throw new Error(await r.text());
-    status.textContent = "Sentences submitted. Thank you!";
-    loadCounter(); // 👈 refresh counter after successful submission
+    statusEl.textContent = "✓ Submitted — thank you for contributing!";
+    statusEl.className = "status-msg success";
+    loadCounter();
   } catch (e) {
+    statusEl.textContent = "Submission failed. Please try again.";
+    statusEl.className = "status-msg error";
     console.error(e);
-    status.textContent = "Failed ❌ " + (e?.message ?? e);
   } finally {
     btn.disabled = false;
   }
