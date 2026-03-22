@@ -90,36 +90,10 @@ input, select {
   color: #f1f5f9;
 }
 input::placeholder { color: #94a3b8; }
-/* ===== Contribute Layout (Sticky Image + Form) ===== */
-.contribute-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
+/* ===== Contribute Layout (single column now) ===== */
+.contribute-section {
   margin: 40px auto;
-  max-width: 1200px;
-}
-@media (min-width: 980px) {
-  .contribute-grid { grid-template-columns: 1fr 1.4fr; align-items: start; }
-}
-.req-sticky {
-  background: #f8fafc;
-  border: 1px solid #334155;
-  border-radius: 14px;
-  padding: 14px;
-  color: #0f172a;
-}
-.req-sticky img { width: 100%; border-radius: 12px; display: block; }
-.req-sticky .image-credit { color: #475569; }
-@media (min-width: 980px) {
-  .req-sticky {
-    position: sticky;
-    top: 20px;
-    height: 80vh;
-  }
-  .req-sticky img {
-    height: 700px;
-    object-fit: contain;
-  }
+  max-width: 800px;
 }
 .form-stack .card { margin-bottom: 16px; }
 .sentence-group { position: relative; margin-bottom: 12px; }
@@ -199,14 +173,7 @@ input::placeholder { color: #94a3b8; }
 </section>
 
 <!-- ===== Contribution Section ===== -->
-<section class="contribute-grid">
-  <!-- Sticky Image -->
-  <aside class="req-sticky">
-    <img src="assets/images/domain_asr_requirements_new_3.png"
-         alt="We need lab-noise audio and example lab sentences">
-    <p class="image-credit">AI-generated illustration (OpenAI)</p>
-  </aside>
-  <!-- Form -->
+<section class="contribute-section">
   <div class="form-stack">
     <div class="card">
       <h2>Step 1 — Your Details</h2>
@@ -359,7 +326,7 @@ document.getElementById("submitSentencesBtn").addEventListener("click", async ()
     loadCounter(); // 👈 refresh counter after successful submission
   } catch (e) {
     console.error(e);
-    status.textContent = "Failed ❌ " + (e?.message ?? e);
+    status.textContent = "Failed  " + (e?.message ?? e);
   } finally {
     btn.disabled = false;
   }
