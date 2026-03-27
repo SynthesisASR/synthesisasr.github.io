@@ -55,6 +55,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 .image-credit{font-size:.75rem;color:var(--muted);text-align:right;margin-bottom:8px;font-style:italic;}
 .scroll-hint{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:16px;flex-shrink:0;color:var(--muted);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;animation:bob 2.5s ease-in-out infinite;}
 .scroll-arrow{color:var(--accent);}
+
 .main-content{padding-top:32px;}
 .section-heading{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
 .section-heading h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;}
@@ -78,7 +79,6 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 audio{width:190px;height:30px;opacity:.85;}
 .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);margin:52px 0;}
 
-/* Cards */
 .form-stack{display:flex;flex-direction:column;gap:12px;}
 .card{background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s;--accent-color:var(--pink);}
 .card:focus-within{border-color:rgba(129,140,248,.22);box-shadow:0 0 0 1px rgba(129,140,248,.07),0 8px 32px rgba(0,0,0,.3);}
@@ -122,70 +122,31 @@ select option{background:#111118;}
 .mode-option.audio-opt.active{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.05);box-shadow:0 8px 32px rgba(52,211,153,.1);transform:translateY(-2px);}
 .mode-option.active::before{opacity:1;}
 .mode-icon{font-size:1.6rem;line-height:1;margin-bottom:10px;display:block;}
-.mode-title{font-size:.95rem;font-weight:600;margin-bottom:5px;letter-spacing:-.01em;}
-.mode-option.type-opt  .mode-title{color:var(--accent);}
+.mode-title{font-size:.95rem;font-weight:600;margin-bottom:5px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;}
+.mode-option.type-opt .mode-title{color:var(--accent);}
 .mode-option.audio-opt .mode-title{color:var(--accent2);}
 .mode-desc{font-size:.78rem;color:var(--muted);line-height:1.55;}
 .mode-check{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;transition:all .2s;}
-.mode-option.type-opt.active  .mode-check{background:var(--accent); border-color:var(--accent);}
+.mode-option.type-opt.active .mode-check{background:var(--accent);border-color:var(--accent);}
 .mode-option.audio-opt.active .mode-check{background:var(--accent2);border-color:var(--accent2);}
 .mode-check-svg{opacity:0;transition:opacity .2s;}
 .mode-option.active .mode-check-svg{opacity:1;}
 
-/* ── Panels ── */
 .mode-panel{display:none;animation:fadeUp .3s cubic-bezier(.16,1,.3,1) both;}
 .mode-panel.visible{display:block;}
 
-/* ── Audio panel hint ── */
 .audio-hint{font-size:.82rem;color:var(--muted);background:rgba(52,211,153,.04);border-left:2px solid rgba(52,211,153,.3);padding:10px 14px;border-radius:0 8px 8px 0;line-height:1.6;margin-bottom:20px;}
 
-/* ── Rec items ── */
-.rec-list{display:flex;flex-direction:column;gap:8px;}
-
-.rec-item{
-  border:1px solid rgba(255,255,255,.07);border-radius:12px;
-  background:rgba(0,0,0,.18);overflow:hidden;
-  transition:border-color .2s,background .2s;
-}
+/* ── Recorder items ── */
+.rec-item{border:1px solid rgba(255,255,255,.06);border-radius:12px;background:rgba(0,0,0,.18);padding:14px 18px;margin-bottom:8px;transition:border-color .2s,background .2s;}
 .rec-item.active{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.04);}
-.rec-item.done  {border-color:rgba(52,211,153,.25);background:rgba(52,211,153,.03);}
-
-/* top row: index + optional label + remove */
-.rec-item-top{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 14px 0;
-}
-.rec-item-num{
-  font-family:'JetBrains Mono',monospace;font-size:.68rem;
-  color:var(--muted);flex-shrink:0;min-width:20px;
-}
+.rec-item.done{border-color:rgba(52,211,153,.25);background:rgba(52,211,153,.03);}
+.rec-item-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.rec-item-num{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);min-width:18px;flex-shrink:0;padding-top:2px;}
 .rec-item.active .rec-item-num{color:#f87171;}
-.rec-item.done   .rec-item-num{color:var(--accent2);}
-
-/* optional label field */
-.rec-label-input{
-  flex:1;padding:5px 10px;border-radius:7px;
-  border:1px solid rgba(255,255,255,.06);
-  background:rgba(255,255,255,.03);
-  color:var(--muted);
-  font-family:'Plus Jakarta Sans',sans-serif;font-size:.78rem;
-  outline:none;transition:border-color .2s,color .2s;
-}
-.rec-label-input::placeholder{color:rgba(107,114,128,.35);font-style:italic;}
-.rec-label-input:focus{border-color:rgba(52,211,153,.25);color:var(--text);}
-
-.rec-remove-btn{
-  flex-shrink:0;width:24px;height:24px;border-radius:6px;
-  background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.15);
-  color:#f87171;cursor:pointer;font-size:14px;
-  display:flex;align-items:center;justify-content:center;padding:0;
-  transition:all .18s;
-}
-.rec-remove-btn:hover{background:rgba(248,113,113,.18);transform:scale(1.08);}
-
-/* controls row */
-.rec-item-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px 12px;}
-
+.rec-item.done .rec-item-num{color:var(--accent2);}
+.rec-item-text{flex:1;font-size:.88rem;line-height:1.5;}
+.rec-item-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .btn-rec-small{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;font-weight:500;transition:all .18s;}
 .btn-rec-small.start-rec{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25)!important;color:#f87171;}
 .btn-rec-small.start-rec:hover{background:rgba(248,113,113,.2);transform:translateY(-1px);}
@@ -193,31 +154,25 @@ select option{background:#111118;}
 .btn-rec-small.redo-rec{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)!important;color:var(--muted);}
 .btn-rec-small.redo-rec:hover{background:rgba(255,255,255,.08);color:var(--text);}
 .btn-rec-small:disabled{opacity:.4;cursor:not-allowed;transform:none!important;animation:none!important;}
-
 .rec-timer{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#f87171;letter-spacing:.06em;display:none;}
 .rec-timer.visible{display:block;}
-
 .rec-wave{display:flex;align-items:center;gap:2px;height:18px;opacity:0;transition:opacity .3s;}
 .rec-wave.visible{opacity:1;}
 .rec-wave .wb{width:2px;border-radius:2px;background:linear-gradient(180deg,#f472b6,#818cf8);transform-origin:center;}
-.rec-wave .wb:nth-child(1){height:8px; animation:waveBar .8s ease-in-out infinite 0.00s}
-.rec-wave .wb:nth-child(2){height:14px;animation:waveBar .8s ease-in-out infinite 0.10s}
-.rec-wave .wb:nth-child(3){height:18px;animation:waveBar .8s ease-in-out infinite 0.20s}
-.rec-wave .wb:nth-child(4){height:14px;animation:waveBar .8s ease-in-out infinite 0.30s}
-.rec-wave .wb:nth-child(5){height:9px; animation:waveBar .8s ease-in-out infinite 0.40s}
+.rec-wave .wb:nth-child(1){height:8px;animation:waveBar .8s ease-in-out infinite 0.00s}
+.rec-wave .wb:nth-child(2){height:14px;animation:waveBar .8s ease-in-out infinite .10s}
+.rec-wave .wb:nth-child(3){height:18px;animation:waveBar .8s ease-in-out infinite .20s}
+.rec-wave .wb:nth-child(4){height:14px;animation:waveBar .8s ease-in-out infinite .30s}
+.rec-wave .wb:nth-child(5){height:9px;animation:waveBar .8s ease-in-out infinite .40s}
 .rec-wave:not(.visible) .wb{animation-play-state:paused;}
-
 .rec-preview{width:190px;height:28px;opacity:.8;display:none;}
 .rec-preview.visible{display:block;}
-
-/* add + upload row */
-.audio-footer{display:flex;flex-direction:column;gap:16px;margin-top:16px;}
-.upload-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);}
+.upload-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06);}
 .upload-progress{flex:1;min-width:160px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;display:none;}
 .upload-progress.visible{display:block;}
 .upload-bar{height:100%;width:0%;border-radius:2px;background:linear-gradient(90deg,var(--accent2),#0ea5e9);transition:width .3s ease;}
 
-/* Counter */
+/* ── Counter ── */
 .counter-card{background:linear-gradient(135deg,rgba(244,114,182,.06),rgba(129,140,248,.06) 50%,rgba(52,211,153,.04));border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 32px;display:flex;align-items:center;gap:24px;}
 .counter-icon{font-size:2.2rem;line-height:1;flex-shrink:0;}
 .counter-body{flex:1;}
@@ -226,7 +181,7 @@ select option{background:#111118;}
 .live-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:var(--accent2);border:1px solid rgba(52,211,153,.2);background:rgba(52,211,153,.06);padding:3px 9px;border-radius:20px;margin-top:7px;}
 .live-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:blink 2s ease-in-out infinite;}
 
-/* Privacy */
+/* ── Privacy ── */
 .privacy-card{border:1px dashed rgba(255,255,255,.07);border-radius:14px;padding:22px 28px;background:rgba(0,0,0,.15);}
 .privacy-card h3{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:7px;}
 .privacy-card p{font-size:.82rem;color:rgba(107,114,128,.85);line-height:1.75;}
@@ -270,8 +225,7 @@ select option{background:#111118;}
 
     <section class="demo-section">
       <div class="section-heading">
-        <h2>Model Performance</h2>
-        <span class="tag">Demo</span>
+        <h2>Model Performance</h2><span class="tag">Demo</span>
       </div>
       <div class="table-wrap">
         <table class="demo-table">
@@ -303,7 +257,7 @@ select option{background:#111118;}
 
       <div class="form-stack">
 
-        <!-- STEP 01 -->
+        <!-- ══ STEP 01 ══ -->
         <div class="card blue fade-up d1">
           <div class="card-header">
             <span class="step-pill">Step 01</span>
@@ -329,24 +283,21 @@ select option{background:#111118;}
               </div>
               <span class="mode-icon">🎙️</span>
               <div class="mode-title">Record Audio</div>
-              <div class="mode-desc">Just hit record and speak. No text required — we'll transcribe your recordings later.</div>
+              <div class="mode-desc">Speak your sentences aloud. Paired voice + text gives the model a much stronger signal.</div>
             </div>
           </div>
 
           <!-- Panel: Type -->
           <div class="mode-panel visible" id="panelType">
-            <p class="hint">
-              Provide example sentences you'd use when documenting synthesis
-              or experimental procedures in your daily lab work.
-            </p>
-            <div id="sentenceContainer">
+            <p class="hint">Provide example sentences you'd use when documenting synthesis or experimental procedures in your daily lab work.</p>
+            <div id="textSentenceContainer">
               <div class="sentence-group">
                 <label>Sentence 1</label>
-                <input type="text" class="sentence-input" placeholder="e.g. The catalyst was calcined at 500°C for 4 hours.">
+                <input type="text" class="text-sentence-input" placeholder="e.g. The catalyst was calcined at 500°C for 4 hours.">
               </div>
             </div>
             <div class="btn-row">
-              <button type="button" class="btn" id="addSentenceBtn">
+              <button type="button" class="btn" id="addTextSentenceBtn">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 Add sentence
               </button>
@@ -355,38 +306,35 @@ select option{background:#111118;}
 
           <!-- Panel: Audio -->
           <div class="mode-panel" id="panelAudio">
-            <p class="audio-hint">
-              Hit <strong style="color:var(--text)">Record</strong> on each slot and speak freely.
-              The label field is optional — add it if you want to note what you said, but it's not required.
-            </p>
-
-            <div class="rec-list" id="recList">
-              <!-- populated by JS -->
+            <p class="audio-hint">Type each sentence below, then hit <strong style="color:var(--text)">Record</strong> to read it aloud. Both text and voice will be submitted as paired training data.</p>
+            <div id="audioSentenceContainer">
+              <div class="sentence-group">
+                <label>Sentence 1</label>
+                <input type="text" class="audio-sentence-input" placeholder="e.g. The catalyst was calcined at 500°C for 4 hours.">
+              </div>
             </div>
-
-            <div class="audio-footer">
-              <div>
-                <button type="button" class="btn" id="addRecSlotBtn">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                  Add another clip
-                </button>
+            <div class="btn-row" style="margin-top:12px;margin-bottom:0;">
+              <button type="button" class="btn" id="addAudioSentenceBtn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Add sentence
+              </button>
+            </div>
+            <div id="recList" style="margin-top:20px;"></div>
+            <div class="upload-row" id="uploadRow" style="display:none;">
+              <button class="btn-submit" id="uploadAudioBtn" type="button" disabled
+                style="background:linear-gradient(135deg,var(--accent2),#0ea5e9);">
+                Upload recordings →
+              </button>
+              <div class="upload-progress" id="uploadProgress">
+                <div class="upload-bar" id="uploadBar"></div>
               </div>
-              <div class="upload-row" id="uploadRow">
-                <button class="btn-submit" id="uploadAudioBtn" type="button" disabled
-                  style="background:linear-gradient(135deg,var(--accent2),#0ea5e9);">
-                  Upload recordings →
-                </button>
-                <div class="upload-progress" id="uploadProgress">
-                  <div class="upload-bar" id="uploadBar"></div>
-                </div>
-                <p class="status-msg" id="audioStatus"></p>
-              </div>
+              <p class="status-msg" id="audioStatus"></p>
             </div>
           </div>
 
         </div><!-- end Step 01 -->
 
-        <!-- STEP 02 -->
+        <!-- ══ STEP 02 ══ -->
         <div class="card fade-up d2">
           <div class="card-header">
             <span class="step-pill">Step 02</span>
@@ -446,12 +394,12 @@ select option{background:#111118;}
 </div>
 
 <script>
-// ─── Config ───────────────────────────────────────────────────────────────────
-const API_BASE             = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
-const SUBMIT_TEXT_ENDPOINT = API_BASE + "/submit_text";
-const GET_COUNT_ENDPOINT   = API_BASE + "/get_count";
-const PRESIGN_ENDPOINT      = API_BASE + "/presign";        // ← new
-const SUBMIT_AUDIO_ENDPOINT = API_BASE + "/submit_audio";   // ← new
+// ─── API endpoints ────────────────────────────────────────────────────────────
+const API_BASE            = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
+const GET_COUNT_ENDPOINT  = API_BASE + "/get_count";
+const SUBMIT_TEXT_EP      = API_BASE + "/submit_text";
+const PRESIGN_EP          = API_BASE + "/presign";
+const SUBMIT_AUDIO_EP     = API_BASE + "/submit_audio";
 
 // ─── Submission ID ────────────────────────────────────────────────────────────
 function makeId() {
@@ -466,12 +414,15 @@ async function loadCounter() {
     const r = await fetch(GET_COUNT_ENDPOINT);
     if (!r.ok) throw new Error();
     document.getElementById("counterDisplay").textContent = (await r.json()).count;
-  } catch { document.getElementById("counterDisplay").textContent = "—"; }
+  } catch {
+    document.getElementById("counterDisplay").textContent = "—";
+  }
 }
 loadCounter();
 
 // ─── Mode toggle ──────────────────────────────────────────────────────────────
 let activeMode = "type";
+
 document.getElementById("modeTypeBtn").addEventListener("click",  () => setMode("type"));
 document.getElementById("modeAudioBtn").addEventListener("click", () => setMode("audio"));
 
@@ -483,11 +434,23 @@ function setMode(mode) {
   document.getElementById("panelAudio").classList.toggle("visible",  mode === "audio");
 }
 
+// ─── Collect user details ─────────────────────────────────────────────────────
+function collectDetails() {
+  const email      = document.getElementById("email").value.trim();
+  const occupation = document.getElementById("occupation").value;
+  const university = document.getElementById("university").value.trim();
+  if (!email || !occupation || !university) {
+    alert("Please fill in Step 02 (Email, Occupation, University / Organization).");
+    return null;
+  }
+  return { submission_id: sid, email, occupation, university };
+}
+
 // ─── TEXT MODE ────────────────────────────────────────────────────────────────
-const sentCont = document.getElementById("sentenceContainer");
+const textCont = document.getElementById("textSentenceContainer");
 
 function updateTextLabels() {
-  sentCont.querySelectorAll(".sentence-group").forEach((g, i) => {
+  textCont.querySelectorAll(".sentence-group").forEach((g, i) => {
     g.querySelector("label").textContent = `Sentence ${i + 1}`;
     let rb = g.querySelector(".remove-btn");
     if (i === 0) { rb?.remove(); return; }
@@ -499,97 +462,113 @@ function updateTextLabels() {
     }
   });
 }
-document.getElementById("addSentenceBtn").addEventListener("click", () => {
+
+document.getElementById("addTextSentenceBtn").addEventListener("click", () => {
   const w = document.createElement("div");
   w.className = "sentence-group";
-  w.innerHTML = `<label>Sentence</label><input type="text" class="sentence-input" placeholder="Type a lab sentence…">`;
-  sentCont.appendChild(w);
+  w.innerHTML = `<label>Sentence</label><input type="text" class="text-sentence-input" placeholder="Type a lab sentence…">`;
+  textCont.appendChild(w);
   updateTextLabels();
   w.querySelector("input").focus();
 });
 updateTextLabels();
 
 function getTextSentences() {
-  return [...document.querySelectorAll(".sentence-input")].map(i => i.value.trim()).filter(Boolean);
+  return [...textCont.querySelectorAll(".text-sentence-input")]
+    .map(i => i.value.trim()).filter(Boolean);
 }
 
-// ─── AUDIO MODE ───────────────────────────────────────────────────────────────
-// Each slot: { id, blob, recorder, timerInterval, active }
-let recSlots = [];   // array of slot objects (in display order)
-let slotCounter = 0; // unique IDs so DOM ids stay stable across rebuilds
+// ─── AUDIO MODE — sentence inputs ────────────────────────────────────────────
+const audioCont = document.getElementById("audioSentenceContainer");
 
-function addSlot() {
-  const id = slotCounter++;
-  const slot = { id, blob: null, recorder: null, timerInterval: null, active: false };
-  recSlots.push(slot);
-  renderSlot(slot);
-  updateUploadBtn();
-  return slot;
-}
-
-function removeSlot(id) {
-  // stop any active recording first
-  const slot = recSlots.find(s => s.id === id);
-  if (slot?.recorder && slot.recorder.state !== "inactive") slot.recorder.stop();
-  recSlots = recSlots.filter(s => s.id !== id);
-  document.getElementById(`slot-${id}`)?.remove();
-  renumberSlots();
-  updateUploadBtn();
-}
-
-function renumberSlots() {
-  document.querySelectorAll(".rec-item[data-slot]").forEach((el, i) => {
-    el.querySelector(".rec-item-num").textContent = `${i + 1}.`;
+function updateAudioLabels() {
+  audioCont.querySelectorAll(".sentence-group").forEach((g, i) => {
+    g.querySelector("label").textContent = `Sentence ${i + 1}`;
+    let rb = g.querySelector(".remove-btn");
+    if (i === 0) { rb?.remove(); return; }
+    if (!rb) {
+      rb = document.createElement("button");
+      rb.type = "button"; rb.className = "remove-btn"; rb.textContent = "×";
+      rb.addEventListener("click", () => { g.remove(); updateAudioLabels(); rebuildRecList(); });
+      g.appendChild(rb);
+    }
   });
 }
 
-function renderSlot(slot) {
-  const list = document.getElementById("recList");
-  const el   = document.createElement("div");
-  el.className = "rec-item";
-  el.id = `slot-${slot.id}`;
-  el.dataset.slot = slot.id;
+document.getElementById("addAudioSentenceBtn").addEventListener("click", () => {
+  const w = document.createElement("div");
+  w.className = "sentence-group";
+  w.innerHTML = `<label>Sentence</label><input type="text" class="audio-sentence-input" placeholder="Type a lab sentence…">`;
+  audioCont.appendChild(w);
+  updateAudioLabels();
+  w.querySelector("input").focus();
+  rebuildRecList();
+});
+updateAudioLabels();
+audioCont.addEventListener("input", () => rebuildRecList());
 
+function getAudioSentences() {
+  return [...audioCont.querySelectorAll(".audio-sentence-input")]
+    .map(i => i.value.trim()).filter(Boolean);
+}
+
+// ─── AUDIO MODE — per-sentence recorder ──────────────────────────────────────
+const recState = {};  // index → { blob, recorder, timerInterval, active }
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function rebuildRecList() {
+  const sentences = getAudioSentences();
+  const list      = document.getElementById("recList");
+  const uploadRow = document.getElementById("uploadRow");
+  list.innerHTML  = "";
+  if (!sentences.length) { uploadRow.style.display = "none"; return; }
+  uploadRow.style.display = "flex";
+  sentences.forEach((text, i) => list.appendChild(buildRecItem(i, text)));
+  updateUploadBtn();
+}
+
+function buildRecItem(i, text) {
+  const done = !!recState[i]?.blob;
+  const el   = document.createElement("div");
+  el.className = "rec-item" + (done ? " done" : "");
   el.innerHTML = `
-    <div class="rec-item-top">
-      <span class="rec-item-num">${recSlots.indexOf(slot) + 1}.</span>
-      <input class="rec-label-input" type="text" placeholder="Optional label (e.g. 'catalyst reduction')">
-      ${recSlots.length > 1
-        ? `<button class="rec-remove-btn" title="Remove">×</button>`
-        : ''}
+    <div class="rec-item-header">
+      <span class="rec-item-num">${i + 1}.</span>
+      <span class="rec-item-text">${esc(text)}</span>
     </div>
     <div class="rec-item-controls">
-      <button class="btn-rec-small start-rec" data-role="start">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>
-        Record
+      <button class="btn-rec-small ${done ? 'redo-rec' : 'start-rec'}" data-role="start">
+        ${done
+          ? `<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 2l7 7M9 2L2 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Re-record`
+          : `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg> Record`}
       </button>
       <button class="btn-rec-small stop-rec" data-role="stop" style="display:none" disabled>
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor"/></svg>
-        Stop
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor"/></svg> Stop
       </button>
-      <span class="rec-timer" id="rt-${slot.id}">0:00</span>
-      <div class="rec-wave" id="rw-${slot.id}">
+      <span class="rec-timer" id="rt-${i}">0:00</span>
+      <div class="rec-wave" id="rw-${i}">
         <div class="wb"></div><div class="wb"></div><div class="wb"></div>
         <div class="wb"></div><div class="wb"></div>
       </div>
-      <audio class="rec-preview" id="rp-${slot.id}" controls></audio>
+      <audio class="rec-preview ${done ? 'visible' : ''}" id="rp-${i}" controls
+        ${done ? `src="${URL.createObjectURL(recState[i].blob)}"` : ''}></audio>
     </div>`;
 
   const startBtn = el.querySelector("[data-role='start']");
   const stopBtn  = el.querySelector("[data-role='stop']");
-  const timer    = el.querySelector(`#rt-${slot.id}`);
-  const wave     = el.querySelector(`#rw-${slot.id}`);
-  const preview  = el.querySelector(`#rp-${slot.id}`);
-  const removeBtn = el.querySelector(".rec-remove-btn");
+  const timer    = el.querySelector(`#rt-${i}`);
+  const wave     = el.querySelector(`#rw-${i}`);
+  const preview  = el.querySelector(`#rp-${i}`);
 
-  if (removeBtn) removeBtn.addEventListener("click", () => removeSlot(slot.id));
-  startBtn.addEventListener("click", () => startRec(slot, el, startBtn, stopBtn, timer, wave, preview));
-  stopBtn.addEventListener("click",  () => stopRec(slot));
-
-  list.appendChild(el);
+  startBtn.addEventListener("click", () => startRec(i, el, startBtn, stopBtn, timer, wave, preview));
+  stopBtn.addEventListener("click",  () => stopRec(i));
+  return el;
 }
 
-async function startRec(slot, el, startBtn, stopBtn, timer, wave, preview) {
+async function startRec(i, el, startBtn, stopBtn, timer, wave, preview) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mime   = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4']
@@ -600,61 +579,50 @@ async function startRec(slot, el, startBtn, stopBtn, timer, wave, preview) {
     recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
     recorder.onstop = () => {
       stream.getTracks().forEach(t => t.stop());
-      clearInterval(slot.timerInterval);
-      slot.blob     = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
-      slot.active   = false;
-      slot.recorder = null;
+      clearInterval(recState[i]?.timerInterval);
+      const blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
+      recState[i] = { ...recState[i], blob, active: false };
 
-      preview.src = URL.createObjectURL(slot.blob);
+      preview.src = URL.createObjectURL(blob);
       preview.classList.add("visible");
       el.classList.remove("active"); el.classList.add("done");
-
       startBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 2l7 7M9 2L2 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Re-record`;
       startBtn.className = "btn-rec-small redo-rec";
-      startBtn.disabled = false;
+      startBtn.disabled  = false;
       stopBtn.style.display = "none"; stopBtn.disabled = true;
       timer.classList.remove("visible"); wave.classList.remove("visible");
-
-      // update remove button visibility (re-render isn't needed, just show it if hidden)
-      if (!el.querySelector(".rec-remove-btn") && recSlots.length > 1) {
-        const rb = document.createElement("button");
-        rb.className = "rec-remove-btn"; rb.title = "Remove"; rb.textContent = "×";
-        rb.addEventListener("click", () => removeSlot(slot.id));
-        el.querySelector(".rec-item-top").appendChild(rb);
-      }
-
       updateUploadBtn();
     };
 
     recorder.start(100);
-    slot.recorder = recorder; slot.active = true;
-
+    recState[i] = { blob: recState[i]?.blob, recorder, chunks, active: true, timerInterval: null };
     el.classList.add("active");
     startBtn.disabled = true;
     stopBtn.style.display = "inline-flex"; stopBtn.disabled = false;
     timer.classList.add("visible"); wave.classList.add("visible");
 
     let secs = 0;
-    slot.timerInterval = setInterval(() => {
+    recState[i].timerInterval = setInterval(() => {
       secs++;
       timer.textContent = `${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
     }, 1000);
-
   } catch(err) {
     alert("Microphone access denied. Please allow microphone access and try again.");
     console.error(err);
   }
 }
 
-function stopRec(slot) {
-  if (slot.recorder && slot.recorder.state !== "inactive") {
-    clearInterval(slot.timerInterval);
-    slot.recorder.stop();
+function stopRec(i) {
+  const s = recState[i];
+  if (s?.recorder && s.recorder.state !== "inactive") {
+    clearInterval(s.timerInterval);
+    s.recorder.stop();
   }
 }
 
 function updateUploadBtn() {
-  const recorded = recSlots.filter(s => s.blob).length;
+  const sentences = getAudioSentences();
+  const recorded  = sentences.filter((_, i) => recState[i]?.blob).length;
   const btn = document.getElementById("uploadAudioBtn");
   btn.disabled = recorded === 0;
   btn.textContent = recorded > 0
@@ -662,18 +630,12 @@ function updateUploadBtn() {
     : "Upload recordings →";
 }
 
-document.getElementById("addRecSlotBtn").addEventListener("click", () => {
-  const slot = addSlot();
-  // scroll to new slot
-  document.getElementById(`slot-${slot.id}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-});
-
-// ─── Upload to S3 ─────────────────────────────────────────────────────────────
+// ─── Upload audio ─────────────────────────────────────────────────────────────
 document.getElementById("uploadAudioBtn").addEventListener("click", async () => {
-  const statusEl  = document.getElementById("audioStatus");
-  const btn       = document.getElementById("uploadAudioBtn");
+  const statusEl   = document.getElementById("audioStatus");
+  const btn        = document.getElementById("uploadAudioBtn");
   const progressEl = document.getElementById("uploadProgress");
-  const barEl     = document.getElementById("uploadBar");
+  const barEl      = document.getElementById("uploadBar");
   statusEl.textContent = ""; statusEl.className = "status-msg";
 
   const details = collectDetails(); if (!details) return;
@@ -692,43 +654,54 @@ document.getElementById("uploadAudioBtn").addEventListener("click", async () => 
 
   try {
     // ── Step 1: get presigned URLs for all files at once ──────────────────
-    const presignRes = await fetch(PRESIGN_ENDPOINT, {
+    console.log("▶ Requesting presigned URLs for", toUpload.length, "files");
+    const presignRes = await fetch(PRESIGN_EP, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         submission_id: details.submission_id,
         files: toUpload.map(r => ({
-          ext:  r.blob.type.includes("wav")  ? "wav"
-              : r.blob.type.includes("mp3")  ? "mp3"
+          ext:  r.blob.type.includes("wav") ? "wav"
+              : r.blob.type.includes("mp3") ? "mp3"
               : "webm",
           size: r.blob.size
         }))
       })
     });
+    console.log("▶ Presign status:", presignRes.status);
     if (!presignRes.ok) throw new Error(await presignRes.text());
     const { presigns } = await presignRes.json();
+    console.log("▶ Got presigns:", presigns);
 
-    // ── Step 2: upload each blob via presigned POST (FormData) ────────────
+    // ── Step 2: upload each blob via presigned POST ───────────────────────
     const uploadedKeys = [];
     for (let j = 0; j < toUpload.length; j++) {
       statusEl.textContent = `Uploading ${j + 1} / ${toUpload.length}…`;
-      const { blob }            = toUpload[j];
-      const { key, upload }     = presigns[j];  // upload = { url, fields }
+      const { blob }        = toUpload[j];
+      const { key, upload } = presigns[j];  // upload = { url, fields }
+
+      console.log(`▶ Uploading file ${j} | key: ${key} | type: ${blob.type} | size: ${blob.size}`);
 
       const form = new FormData();
       Object.entries(upload.fields).forEach(([k, v]) => form.append(k, v));
       form.append("file", blob);  // must be last
 
       const put = await fetch(upload.url, { method: "POST", body: form });
-      if (!put.ok) throw new Error(`S3 upload failed (HTTP ${put.status})`);
+      console.log(`▶ S3 response: ${put.status}`);
+      if (!put.ok) {
+        const txt = await put.text();
+        console.error("✗ S3 error:", txt);
+        throw new Error(`S3 upload failed (HTTP ${put.status})`);
+      }
 
       uploadedKeys.push(key);
       barEl.style.width = `${Math.round((j + 1) / toUpload.length * 100)}%`;
     }
 
-    // ── Step 3: confirm with submit_audio so metadata is saved ───────────
+    // ── Step 3: save metadata via submit_audio ────────────────────────────
     statusEl.textContent = "Saving metadata…";
-    const submitRes = await fetch(SUBMIT_AUDIO_ENDPOINT, {
+    console.log("▶ Calling submit_audio with keys:", uploadedKeys);
+    const submitRes = await fetch(SUBMIT_AUDIO_EP, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -740,6 +713,7 @@ document.getElementById("uploadAudioBtn").addEventListener("click", async () => 
         timestamp:     new Date().toISOString()
       })
     });
+    console.log("▶ submit_audio status:", submitRes.status);
     if (!submitRes.ok) throw new Error(await submitRes.text());
 
     statusEl.textContent = `✓ ${uploadedKeys.length} recording${uploadedKeys.length > 1 ? 's' : ''} uploaded — thank you!`;
@@ -749,25 +723,13 @@ document.getElementById("uploadAudioBtn").addEventListener("click", async () => 
   } catch(e) {
     statusEl.textContent = "✗ Upload failed — please try again.";
     statusEl.className = "status-msg err";
-    console.error(e);
+    console.error("Upload error:", e);
   } finally {
     btn.disabled = false;
   }
 });
 
-// ─── Details ──────────────────────────────────────────────────────────────────
-function collectDetails() {
-  const email      = document.getElementById("email").value.trim();
-  const occupation = document.getElementById("occupation").value;
-  const university = document.getElementById("university").value.trim();
-  if (!email || !occupation || !university) {
-    alert("Please fill in Step 02 (Email, Occupation, University / Organization).");
-    return null;
-  }
-  return { submission_id: sid, email, occupation, university };
-}
-
-// ─── Submit (Step 02) ─────────────────────────────────────────────────────────
+// ─── Submit text ──────────────────────────────────────────────────────────────
 document.getElementById("submitBtn").addEventListener("click", async () => {
   const statusEl = document.getElementById("submitStatus");
   const btn      = document.getElementById("submitBtn");
@@ -775,55 +737,40 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
 
   const details = collectDetails(); if (!details) return;
 
-  if (activeMode === "type") {
-    // text mode requires at least one sentence
-    const sentences = getTextSentences();
-    if (!sentences.length) { alert("Please enter at least one sentence in Step 01."); return; }
+  // collect from whichever panel is active
+  const sentences = activeMode === "type" ? getTextSentences() : getAudioSentences();
+  if (!sentences.length) {
+    alert("Please enter at least one sentence in Step 01.");
+    return;
+  }
 
-    btn.disabled = true; statusEl.textContent = "Submitting…";
-    try {
-      const r = await fetch(SUBMIT_TEXT_ENDPOINT, {
-        method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...details, sentences, mode: "type", timestamp: new Date().toISOString() })
-      });
-      if (!r.ok) throw new Error(await r.text());
-      statusEl.textContent = "✓ Submitted — thank you!";
-      statusEl.className = "status-msg ok";
-      loadCounter();
-    } catch(e) {
-      statusEl.textContent = "✗ Failed — please try again.";
-      statusEl.className = "status-msg err";
-      console.error(e);
-    } finally { btn.disabled = false; }
-
-  } else {
-    // audio mode: just submit the user's details so you know who contributed
-    // actual audio files are uploaded separately via the Upload button
-    const recorded = recSlots.filter(s => s.blob).length;
-    if (recorded === 0) {
-      alert("Please record at least one audio clip before submitting.");
-      return;
-    }
-    btn.disabled = true; statusEl.textContent = "Submitting…";
-    try {
-      const r = await fetch(SUBMIT_TEXT_ENDPOINT, {
-        method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ ...details, sentences: [], mode: "audio", audio_clip_count: recorded, timestamp: new Date().toISOString() })
-      });
-      if (!r.ok) throw new Error(await r.text());
-      statusEl.textContent = "✓ Details saved. Don't forget to upload your recordings above!";
-      statusEl.className = "status-msg ok";
-      loadCounter();
-    } catch(e) {
-      statusEl.textContent = "✗ Failed — please try again.";
-      statusEl.className = "status-msg err";
-      console.error(e);
-    } finally { btn.disabled = false; }
+  btn.disabled = true; statusEl.textContent = "Submitting…";
+  try {
+    const r = await fetch(SUBMIT_TEXT_EP, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        ...details,
+        sentences,
+        mode:      activeMode,
+        timestamp: new Date().toISOString()
+      })
+    });
+    if (!r.ok) throw new Error(await r.text());
+    statusEl.textContent = "✓ Submitted — thank you!";
+    statusEl.className   = "status-msg ok";
+    loadCounter();
+  } catch(e) {
+    statusEl.textContent = "✗ Failed — please try again.";
+    statusEl.className   = "status-msg err";
+    console.error(e);
+  } finally {
+    btn.disabled = false;
   }
 });
 
-// ─── Init: one default recording slot ────────────────────────────────────────
-addSlot();
+// ─── Init ─────────────────────────────────────────────────────────────────────
+rebuildRecList();
 </script>
 </body>
 </html>
