@@ -18,581 +18,236 @@
   --accent2:     #34d399;
   --pink:        #f472b6;
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
 
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 400;
-  background: var(--bg);
-  color: var(--text);
-  
-  overflow-x: hidden;
-  line-height: 1.6;
-}
+.bg-canvas { position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none; }
+.blob { position:absolute;border-radius:50%;filter:blur(120px);will-change:transform; }
+.blob-1{width:550px;height:550px;background:radial-gradient(circle,#f472b6,transparent 70%);top:-180px;left:-120px;opacity:.1;animation:drift1 20s ease-in-out infinite alternate;}
+.blob-2{width:480px;height:480px;background:radial-gradient(circle,#818cf8,transparent 70%);top:25%;right:-80px;opacity:.1;animation:drift2 16s ease-in-out infinite alternate;}
+.blob-3{width:600px;height:600px;background:radial-gradient(circle,#6366f1,transparent 70%);bottom:-180px;left:25%;opacity:.08;animation:drift3 22s ease-in-out infinite alternate;}
+.blob-4{width:380px;height:380px;background:radial-gradient(circle,#34d399,transparent 70%);top:55%;left:5%;opacity:.06;animation:drift4 18s ease-in-out infinite alternate;}
+@keyframes drift1{from{transform:translate(0,0)}to{transform:translate(80px,60px)}}
+@keyframes drift2{from{transform:translate(0,0)}to{transform:translate(-60px,90px)}}
+@keyframes drift3{from{transform:translate(0,0)}to{transform:translate(-40px,-80px)}}
+@keyframes drift4{from{transform:translate(0,0)}to{transform:translate(60px,-50px)}}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:52px 52px;}
 
-/* ===== Subtle blob background ===== */
-.bg-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  will-change: transform;
-}
-.blob-1 {
-  width: 550px; height: 550px;
-  background: radial-gradient(circle, #f472b6, transparent 70%);
-  top: -180px; left: -120px;
-  opacity: 0.1;
-  animation: drift1 20s ease-in-out infinite alternate;
-}
-.blob-2 {
-  width: 480px; height: 480px;
-  background: radial-gradient(circle, #818cf8, transparent 70%);
-  top: 25%; right: -80px;
-  opacity: 0.1;
-  animation: drift2 16s ease-in-out infinite alternate;
-}
-.blob-3 {
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, #6366f1, transparent 70%);
-  bottom: -180px; left: 25%;
-  opacity: 0.08;
-  animation: drift3 22s ease-in-out infinite alternate;
-}
-.blob-4 {
-  width: 380px; height: 380px;
-  background: radial-gradient(circle, #34d399, transparent 70%);
-  top: 55%; left: 5%;
-  opacity: 0.06;
-  animation: drift4 18s ease-in-out infinite alternate;
-}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:48px 24px 100px;}
 
-@keyframes drift1 {
-  from { transform: translate(0,0); }
-  to   { transform: translate(80px, 60px); }
-}
-@keyframes drift2 {
-  from { transform: translate(0,0); }
-  to   { transform: translate(-60px, 90px); }
-}
-@keyframes drift3 {
-  from { transform: translate(0,0); }
-  to   { transform: translate(-40px, -80px); }
-}
-@keyframes drift4 {
-  from { transform: translate(0,0); }
-  to   { transform: translate(60px, -50px); }
-}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes shimmer{0%{background-position:0% center}100%{background-position:200% center}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(248,113,113,.5)}70%{box-shadow:0 0 0 12px rgba(248,113,113,0)}100%{box-shadow:0 0 0 0 rgba(248,113,113,0)}}
+@keyframes waveBar{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+@keyframes bob{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(6px);opacity:1}}
 
-.bg-grid {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-  background-size: 52px 52px;
-}
+.fade-up{animation:fadeUp .55s cubic-bezier(.16,1,.3,1) both;}
+.d1{animation-delay:.08s}.d2{animation-delay:.16s}.d3{animation-delay:.24s}.d4{animation-delay:.32s}
 
-/* ===== Page ===== */
-.page {
-  position: relative;
-  z-index: 1;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 48px 24px 100px;
-}
+.hero-screen{height:100vh;display:flex;flex-direction:column;padding:32px 0 16px;overflow:hidden;}
+.page-title h1{font-size:2.8rem;font-weight:700;letter-spacing:-.03em;line-height:1.2;margin-bottom:16px;background:linear-gradient(90deg,#ffffff 30%,#818cf8 70%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-screen .hero{flex:1;min-height:0;overflow:hidden;}
+.hero-screen .hero img{width:100%;height:100%;object-fit:contain;object-position:top;}
+.hero{position:relative;border-radius:18px;overflow:hidden;margin-bottom:10px;border:1px solid rgba(255,255,255,.07);box-shadow:0 24px 80px rgba(0,0,0,.45);}
+.hero img{width:100%;display:block;filter:brightness(.9) saturate(1.05);}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(9,9,15,.6) 100%);}
+.image-credit{font-size:.75rem;color:var(--muted);text-align:right;margin-bottom:8px;font-style:italic;}
+.scroll-hint{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:16px;flex-shrink:0;color:var(--muted);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;animation:bob 2.5s ease-in-out infinite;}
+.scroll-arrow{color:var(--accent);}
+.main-content{padding-top:32px;}
+.section-heading{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+.section-heading h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;}
+.section-heading .tag{font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(129,140,248,.3);padding:3px 10px;border-radius:20px;background:rgba(129,140,248,.07);}
+.demo-section{margin-bottom:60px;}
+.table-wrap{overflow-x:auto;border-radius:14px;}
+.demo-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card-bg);backdrop-filter:blur(16px);border:1px solid var(--card-border);border-radius:14px;overflow:hidden;}
+.demo-table thead{background:rgba(255,255,255,.025);}
+.demo-table th{padding:13px 20px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;}
+.demo-table td{padding:16px 20px;font-size:.9rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle;}
+.demo-table tbody tr:last-child td{border-bottom:none;}
+.demo-table tbody tr{transition:background .2s;}
+.demo-table tbody tr:hover{background:rgba(255,255,255,.025);}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;font-size:.78rem;font-family:'JetBrains Mono',monospace;}
+.pill.base{background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.2);color:#fb923c;}
+.pill.enhanced{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);color:var(--accent2);}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
+.transcription{font-family:'JetBrains Mono',monospace;font-size:.9rem;}
+.transcription.wrong{color:#f87171;}
+.transcription.right{color:var(--accent2);}
+audio{width:190px;height:30px;opacity:.85;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);margin:52px 0;}
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.25; }
-}
-@keyframes shimmer {
-  0%   { background-position: 0% center; }
-  100% { background-position: 200% center; }
-}
+/* Cards */
+.form-stack{display:flex;flex-direction:column;gap:12px;}
+.card{background:var(--card-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:16px;padding:28px 32px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s;--accent-color:var(--pink);}
+.card:focus-within{border-color:rgba(129,140,248,.22);box-shadow:0 0 0 1px rgba(129,140,248,.07),0 8px 32px rgba(0,0,0,.3);}
+.card::before{content:'';position:absolute;top:0;left:0;width:80px;height:2px;background:linear-gradient(90deg,var(--accent-color),transparent);border-radius:2px;}
+.card.blue{--accent-color:var(--accent);}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.step-pill{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--accent-color);border:1px solid currentColor;padding:3px 9px;border-radius:20px;opacity:.75;text-transform:uppercase;}
+.card-title{font-size:1.2rem;font-weight:600;letter-spacing:-.01em;}
+.field{margin-bottom:18px;}
+.field:last-of-type{margin-bottom:0;}
+label{display:block;font-size:.72rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:7px;}
+input[type="text"],input[type="email"],select{width:100%;box-sizing:border-box;padding:11px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.3);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:.9rem;font-weight:300;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+input::placeholder{color:rgba(107,114,128,.5);}
+input:focus,select:focus{border-color:rgba(129,140,248,.4);box-shadow:0 0 0 3px rgba(129,140,248,.07);}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 11 11'%3E%3Cpath fill='%236b7280' d='M5.5 7.5L1 3h9z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px;cursor:pointer;}
+select option{background:#111118;}
+.hint{font-size:.82rem;color:var(--muted);background:rgba(129,140,248,.04);border-left:2px solid rgba(129,140,248,.35);padding:10px 14px;border-radius:0 8px 8px 0;line-height:1.6;margin-bottom:20px;}
+.sentence-group{position:relative;margin-bottom:9px;}
+.sentence-group input{padding-right:44px;}
+.remove-btn{position:absolute;right:10px;bottom:9px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.18);color:#f87171;border-radius:7px;width:28px;height:28px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;padding:0;transition:all .18s;}
+.remove-btn:hover{background:rgba(248,113,113,.18);transform:scale(1.08);}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;align-items:center;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:9px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:.84rem;font-weight:500;cursor:pointer;transition:all .18s;}
+.btn:hover{background:rgba(255,255,255,.08);transform:translateY(-1px);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn-submit{padding:11px 26px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--pink),var(--accent));color:white;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:all .22s;box-shadow:0 4px 20px rgba(244,114,182,.22);}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(244,114,182,.32);}
+.btn-submit:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+.status-msg{font-size:.8rem;margin-top:10px;min-height:18px;color:var(--muted);}
+.status-msg.ok{color:var(--accent2);}
+.status-msg.err{color:#f87171;}
 
-.fade-up { animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) both; }
-.d1 { animation-delay: 0.08s; }
-.d2 { animation-delay: 0.16s; }
-.d3 { animation-delay: 0.24s; }
-.d4 { animation-delay: 0.32s; }
+/* ── Mode selector ── */
+.mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
+.mode-option{position:relative;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);padding:20px 22px;cursor:pointer;transition:border-color .25s,background .25s,box-shadow .25s,transform .18s;user-select:none;overflow:hidden;}
+.mode-option::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px;opacity:0;transition:opacity .25s;}
+.mode-option.type-opt::before{background:linear-gradient(90deg,var(--accent),transparent);}
+.mode-option.audio-opt::before{background:linear-gradient(90deg,var(--accent2),transparent);}
+.mode-option:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.14);transform:translateY(-1px);}
+.mode-option.type-opt.active{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);box-shadow:0 8px 32px rgba(129,140,248,.1);transform:translateY(-2px);}
+.mode-option.audio-opt.active{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.05);box-shadow:0 8px 32px rgba(52,211,153,.1);transform:translateY(-2px);}
+.mode-option.active::before{opacity:1;}
+.mode-icon{font-size:1.6rem;line-height:1;margin-bottom:10px;display:block;}
+.mode-title{font-size:.95rem;font-weight:600;margin-bottom:5px;letter-spacing:-.01em;}
+.mode-option.type-opt  .mode-title{color:var(--accent);}
+.mode-option.audio-opt .mode-title{color:var(--accent2);}
+.mode-desc{font-size:.78rem;color:var(--muted);line-height:1.55;}
+.mode-check{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.mode-option.type-opt.active  .mode-check{background:var(--accent); border-color:var(--accent);}
+.mode-option.audio-opt.active .mode-check{background:var(--accent2);border-color:var(--accent2);}
+.mode-check-svg{opacity:0;transition:opacity .2s;}
+.mode-option.active .mode-check-svg{opacity:1;}
 
-/* ===== Page Title ===== */
-.page-title h1 {
-  font-size: 2.8rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-  margin-bottom: 16px;
-  background: linear-gradient(90deg, #ffffff 30%, #818cf8 70%, #a78bfa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-}
+/* ── Panels ── */
+.mode-panel{display:none;animation:fadeUp .3s cubic-bezier(.16,1,.3,1) both;}
+.mode-panel.visible{display:block;}
 
-/* ===== Full-viewport hero screen ===== */
-.hero-screen {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 32px 0 16px;
-  overflow: hidden;
-}
-.hero-screen .hero {
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-.hero-screen .hero img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: top;
-}
+/* ── Audio panel hint ── */
+.audio-hint{font-size:.82rem;color:var(--muted);background:rgba(52,211,153,.04);border-left:2px solid rgba(52,211,153,.3);padding:10px 14px;border-radius:0 8px 8px 0;line-height:1.6;margin-bottom:20px;}
 
-/* ===== Scroll hint ===== */
-.scroll-hint {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-  flex-shrink: 0;
-  color: var(--muted);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  animation: bob 2.5s ease-in-out infinite;
-}
-@keyframes bob {
-  0%, 100% { transform: translateY(0); opacity: 0.6; }
-  50%       { transform: translateY(6px); opacity: 1; }
-}
-.scroll-arrow { color: var(--accent); }
+/* ── Rec items ── */
+.rec-list{display:flex;flex-direction:column;gap:8px;}
 
-/* ===== Main scrollable content ===== */
-.main-content {
-  padding-top: 32px;
+.rec-item{
+  border:1px solid rgba(255,255,255,.07);border-radius:12px;
+  background:rgba(0,0,0,.18);overflow:hidden;
+  transition:border-color .2s,background .2s;
 }
+.rec-item.active{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.04);}
+.rec-item.done  {border-color:rgba(52,211,153,.25);background:rgba(52,211,153,.03);}
 
-/* ===== Hero ===== */
-.hero {
-  position: relative;
-  border-radius: 18px;
-  overflow: hidden;
-  margin-bottom: 10px;
-  border: 1px solid rgba(255,255,255,0.07);
-  box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+/* top row: index + optional label + remove */
+.rec-item-top{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px 0;
 }
-.hero img { width: 100%; display: block; filter: brightness(0.9) saturate(1.05); }
-.hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 55%, rgba(9,9,15,0.6) 100%);
+.rec-item-num{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--muted);flex-shrink:0;min-width:20px;
 }
-.hero-tag {
-  position: absolute;
-  bottom: 16px; left: 18px;
-  z-index: 2;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent2);
-  background: rgba(52,211,153,0.1);
-  border: 1px solid rgba(52,211,153,0.25);
-  padding: 5px 12px;
-  border-radius: 20px;
-}
-.image-credit {
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-align: right;
-  margin-bottom: 8px;
-  font-style: italic;
-}
+.rec-item.active .rec-item-num{color:#f87171;}
+.rec-item.done   .rec-item-num{color:var(--accent2);}
 
-/* ===== Section heading ===== */
-.section-heading {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 22px;
+/* optional label field */
+.rec-label-input{
+  flex:1;padding:5px 10px;border-radius:7px;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.03);
+  color:var(--muted);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:.78rem;
+  outline:none;transition:border-color .2s,color .2s;
 }
-.section-heading h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-.section-heading .tag {
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid rgba(129,140,248,0.3);
-  padding: 3px 10px;
-  border-radius: 20px;
-  background: rgba(129,140,248,0.07);
-}
+.rec-label-input::placeholder{color:rgba(107,114,128,.35);font-style:italic;}
+.rec-label-input:focus{border-color:rgba(52,211,153,.25);color:var(--text);}
 
-/* ===== Demo Table ===== */
-.demo-section { margin-bottom: 60px; }
-.table-wrap { overflow-x: auto; border-radius: 14px; }
-.demo-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--card-border);
-  border-radius: 14px;
-  overflow: hidden;
+.rec-remove-btn{
+  flex-shrink:0;width:24px;height:24px;border-radius:6px;
+  background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.15);
+  color:#f87171;cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;padding:0;
+  transition:all .18s;
 }
-.demo-table thead {
-  background: rgba(255,255,255,0.025);
-}
-.demo-table th {
-  padding: 13px 20px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  border-bottom: 1px solid var(--card-border);
-  font-family: 'JetBrains Mono', monospace;
-}
-.demo-table td {
-  padding: 16px 20px;
-  font-size: 0.9rem;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  vertical-align: middle;
-}
-.demo-table tbody tr:last-child td { border-bottom: none; }
-.demo-table tbody tr { transition: background 0.2s; }
-.demo-table tbody tr:hover { background: rgba(255,255,255,0.025); }
+.rec-remove-btn:hover{background:rgba(248,113,113,.18);transform:scale(1.08);}
 
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 11px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-family: 'JetBrains Mono', monospace;
-}
-.pill.base     { background: rgba(251,146,60,0.08);  border: 1px solid rgba(251,146,60,0.2);  color: #fb923c; }
-.pill.enhanced { background: rgba(52,211,153,0.08);  border: 1px solid rgba(52,211,153,0.2);  color: var(--accent2); }
-.pill::before  { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+/* controls row */
+.rec-item-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px 12px;}
 
-.transcription { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
-.transcription.wrong { color: #f87171; }
-.transcription.right  { color: var(--accent2); }
+.btn-rec-small{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;font-weight:500;transition:all .18s;}
+.btn-rec-small.start-rec{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25)!important;color:#f87171;}
+.btn-rec-small.start-rec:hover{background:rgba(248,113,113,.2);transform:translateY(-1px);}
+.btn-rec-small.stop-rec{background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4)!important;color:#f87171;animation:pulseRing 1.5s ease-out infinite;}
+.btn-rec-small.redo-rec{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)!important;color:var(--muted);}
+.btn-rec-small.redo-rec:hover{background:rgba(255,255,255,.08);color:var(--text);}
+.btn-rec-small:disabled{opacity:.4;cursor:not-allowed;transform:none!important;animation:none!important;}
 
-audio { width: 190px; height: 30px; opacity: 0.85; }
+.rec-timer{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#f87171;letter-spacing:.06em;display:none;}
+.rec-timer.visible{display:block;}
 
-/* ===== Divider ===== */
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
-  margin: 52px 0;
-}
+.rec-wave{display:flex;align-items:center;gap:2px;height:18px;opacity:0;transition:opacity .3s;}
+.rec-wave.visible{opacity:1;}
+.rec-wave .wb{width:2px;border-radius:2px;background:linear-gradient(180deg,#f472b6,#818cf8);transform-origin:center;}
+.rec-wave .wb:nth-child(1){height:8px; animation:waveBar .8s ease-in-out infinite 0.00s}
+.rec-wave .wb:nth-child(2){height:14px;animation:waveBar .8s ease-in-out infinite 0.10s}
+.rec-wave .wb:nth-child(3){height:18px;animation:waveBar .8s ease-in-out infinite 0.20s}
+.rec-wave .wb:nth-child(4){height:14px;animation:waveBar .8s ease-in-out infinite 0.30s}
+.rec-wave .wb:nth-child(5){height:9px; animation:waveBar .8s ease-in-out infinite 0.40s}
+.rec-wave:not(.visible) .wb{animation-play-state:paused;}
 
-/* ===== Cards ===== */
-.form-stack { display: flex; flex-direction: column; gap: 12px; }
+.rec-preview{width:190px;height:28px;opacity:.8;display:none;}
+.rec-preview.visible{display:block;}
 
-.card {
-  background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 28px 32px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  --accent-color: var(--pink);
-}
-.card:focus-within {
-  border-color: rgba(129,140,248,0.22);
-  box-shadow: 0 0 0 1px rgba(129,140,248,0.07), 0 8px 32px rgba(0,0,0,0.3);
-}
-/* subtle top-left corner line */
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 80px; height: 2px;
-  background: linear-gradient(90deg, var(--accent-color), transparent);
-  border-radius: 2px;
-}
-.card.blue { --accent-color: var(--accent); }
+/* add + upload row */
+.audio-footer{display:flex;flex-direction:column;gap:16px;margin-top:16px;}
+.upload-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);}
+.upload-progress{flex:1;min-width:160px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;display:none;}
+.upload-progress.visible{display:block;}
+.upload-bar{height:100%;width:0%;border-radius:2px;background:linear-gradient(90deg,var(--accent2),#0ea5e9);transition:width .3s ease;}
 
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-.step-pill {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  color: var(--accent-color);
-  border: 1px solid currentColor;
-  padding: 3px 9px;
-  border-radius: 20px;
-  opacity: 0.75;
-  text-transform: uppercase;
-}
-.card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
+/* Counter */
+.counter-card{background:linear-gradient(135deg,rgba(244,114,182,.06),rgba(129,140,248,.06) 50%,rgba(52,211,153,.04));border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 32px;display:flex;align-items:center;gap:24px;}
+.counter-icon{font-size:2.2rem;line-height:1;flex-shrink:0;}
+.counter-body{flex:1;}
+.counter-label{font-size:.7rem;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:4px;}
+.counter-num{font-size:2.8rem;font-weight:700;line-height:1;letter-spacing:-.03em;background:linear-gradient(90deg,var(--pink),var(--accent),var(--accent2));background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s linear infinite;}
+.live-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:var(--accent2);border:1px solid rgba(52,211,153,.2);background:rgba(52,211,153,.06);padding:3px 9px;border-radius:20px;margin-top:7px;}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:blink 2s ease-in-out infinite;}
 
-/* ===== Fields ===== */
-.field { margin-bottom: 18px; }
-.field:last-of-type { margin-bottom: 0; }
+/* Privacy */
+.privacy-card{border:1px dashed rgba(255,255,255,.07);border-radius:14px;padding:22px 28px;background:rgba(0,0,0,.15);}
+.privacy-card h3{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.privacy-card p{font-size:.82rem;color:rgba(107,114,128,.85);line-height:1.75;}
+.privacy-card b{color:rgba(232,232,240,.6);font-weight:500;}
 
-label {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  margin-bottom: 7px;
-}
-
-input[type="text"],
-input[type="email"],
-select {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 11px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.07);
-  background: rgba(0,0,0,0.3);
-  color: var(--text);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 300;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  -webkit-appearance: none;
-}
-input::placeholder { color: rgba(107,114,128,0.5); }
-input:focus, select:focus {
-  border-color: rgba(129,140,248,0.4);
-  box-shadow: 0 0 0 3px rgba(129,140,248,0.07);
-}
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 11 11'%3E%3Cpath fill='%236b7280' d='M5.5 7.5L1 3h9z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 13px center;
-  padding-right: 34px;
-  cursor: pointer;
-}
-select option { background: #111118; }
-
-.hint {
-  font-size: 0.82rem;
-  color: var(--muted);
-  background: rgba(129,140,248,0.04);
-  border-left: 2px solid rgba(129,140,248,0.35);
-  padding: 10px 14px;
-  border-radius: 0 8px 8px 0;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-.sentence-group { position: relative; margin-bottom: 9px; }
-.sentence-group input { padding-right: 44px; }
-.remove-btn {
-  position: absolute;
-  right: 10px;
-  bottom: 9px;
-  top: auto;
-  transform: none;
-  background: rgba(248,113,113,0.08);
-  border: 1px solid rgba(248,113,113,0.18);
-  color: #f87171;
-  border-radius: 7px;
-  width: 28px; height: 28px;
-  cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  transition: all 0.18s;
-}
-.remove-btn:hover {
-  background: rgba(248,113,113,0.18);
-  transform: scale(1.08);
-}
-
-.btn-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  align-items: center;
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 16px;
-  border-radius: 9px;
-  border: 1px solid rgba(255,255,255,0.09);
-  background: rgba(255,255,255,0.04);
-  color: var(--text);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.84rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.18s;
-}
-.btn:hover { background: rgba(255,255,255,0.08); transform: translateY(-1px); }
-
-.btn-submit {
-  padding: 11px 26px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, var(--pink), var(--accent));
-  color: white;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: all 0.22s;
-  box-shadow: 0 4px 20px rgba(244,114,182,0.22);
-}
-.btn-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(244,114,182,0.32);
-}
-.btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
-
-.status-msg { font-size: 0.8rem; margin-top: 10px; min-height: 18px; color: var(--muted); }
-.status-msg.ok  { color: var(--accent2); }
-.status-msg.err { color: #f87171; }
-
-/* ===== Counter ===== */
-.counter-card {
-  background: linear-gradient(135deg,
-    rgba(244,114,182,0.06),
-    rgba(129,140,248,0.06) 50%,
-    rgba(52,211,153,0.04)
-  );
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 28px 32px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-.counter-icon { font-size: 2.2rem; line-height: 1; flex-shrink: 0; }
-.counter-body { flex: 1; }
-.counter-label {
-  font-size: 0.7rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  margin-bottom: 4px;
-}
-.counter-num {
-  font-size: 2.8rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  background: linear-gradient(90deg, var(--pink), var(--accent), var(--accent2));
-  background-size: 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer 5s linear infinite;
-}
-.live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.7rem;
-  color: var(--accent2);
-  border: 1px solid rgba(52,211,153,0.2);
-  background: rgba(52,211,153,0.06);
-  padding: 3px 9px;
-  border-radius: 20px;
-  margin-top: 7px;
-}
-.live-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--accent2);
-  animation: blink 2s ease-in-out infinite;
-}
-
-/* ===== Privacy ===== */
-.privacy-card {
-  border: 1px dashed rgba(255,255,255,0.07);
-  border-radius: 14px;
-  padding: 22px 28px;
-  background: rgba(0,0,0,0.15);
-}
-.privacy-card h3 {
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.privacy-card p { font-size: 0.82rem; color: rgba(107,114,128,0.85); line-height: 1.75; }
-.privacy-card b { color: rgba(232,232,240,0.6); font-weight: 500; }
-
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #222230; border-radius: 3px; }
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#222230;border-radius:3px;}
+@media(max-width:600px){.mode-selector{grid-template-columns:1fr;}.page-title h1{font-size:2rem;}}
 </style>
 </head>
 <body>
 
 <div class="bg-canvas">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-  <div class="blob blob-4"></div>
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="blob blob-3"></div><div class="blob blob-4"></div>
 </div>
 <div class="bg-grid"></div>
 
 <div class="page">
 
-  <!-- ===== Full-viewport hero ===== -->
   <div class="hero-screen">
     <div class="page-title fade-up">
       <h1>Let's make a Synthesis specific<br>speech recognition model</h1>
@@ -604,12 +259,13 @@ select option { background: #111118; }
     <div class="scroll-hint fade-up d3">
       <span>Scroll to explore</span>
       <div class="scroll-arrow">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v14M2 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1v14M2 9l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
     </div>
   </div>
 
-  <!-- ===== Scrollable content ===== -->
   <div class="main-content">
 
     <section class="demo-section">
@@ -617,218 +273,518 @@ select option { background: #111118; }
         <h2>Model Performance</h2>
         <span class="tag">Demo</span>
       </div>
-    <div class="table-wrap">
-      <table class="demo-table">
-        <thead>
-          <tr>
-            <th>Training Dataset</th>
-            <th>Input Audio</th>
-            <th>Output Transcription</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="pill base">Without domain vocabulary</span></td>
-            <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
-            <td><span class="transcription wrong">atalisis is great</span></td>
-          </tr>
-          <tr>
-            <td><span class="pill enhanced">With domain vocabulary</span></td>
-            <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
-            <td><span class="transcription right">catalysis is great</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+      <div class="table-wrap">
+        <table class="demo-table">
+          <thead>
+            <tr><th>Training Dataset</th><th>Input Audio</th><th>Output Transcription</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pill base">Without domain vocabulary</span></td>
+              <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
+              <td><span class="transcription wrong">atalisis is great</span></td>
+            </tr>
+            <tr>
+              <td><span class="pill enhanced">With domain vocabulary</span></td>
+              <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
+              <td><span class="transcription right">catalysis is great</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-  <div class="divider"></div>
+    <div class="divider"></div>
 
-  <section>
-    <div class="section-heading fade-up d3" style="margin-bottom:24px;">
-      <h2>Contribute to the Dataset </h2>
-    </div>
+    <section>
+      <div class="section-heading fade-up d3" style="margin-bottom:24px;">
+        <h2>Contribute to the Dataset</h2>
+      </div>
 
-    <div class="form-stack">
+      <div class="form-stack">
 
-      <div class="card blue fade-up d1">
-        <div class="card-header">
-          <span class="step-pill">Step 01</span>
-          <span class="card-title">Lab Sentences</span>
+        <!-- STEP 01 -->
+        <div class="card blue fade-up d1">
+          <div class="card-header">
+            <span class="step-pill">Step 01</span>
+            <span class="card-title">Your Contribution</span>
+          </div>
+
+          <div class="mode-selector">
+            <div class="mode-option type-opt active" id="modeTypeBtn">
+              <div class="mode-check">
+                <svg class="mode-check-svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
+                  <path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="mode-icon">✍️</span>
+              <div class="mode-title">Type Sentences</div>
+              <div class="mode-desc">Write lab sentences as you'd dictate them. Quick &amp; easy — no microphone needed.</div>
+            </div>
+            <div class="mode-option audio-opt" id="modeAudioBtn">
+              <div class="mode-check">
+                <svg class="mode-check-svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
+                  <path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="mode-icon">🎙️</span>
+              <div class="mode-title">Record Audio</div>
+              <div class="mode-desc">Just hit record and speak. No text required — we'll transcribe your recordings later.</div>
+            </div>
+          </div>
+
+          <!-- Panel: Type -->
+          <div class="mode-panel visible" id="panelType">
+            <p class="hint">
+              Provide example sentences you'd use when documenting synthesis
+              or experimental procedures in your daily lab work.
+            </p>
+            <div id="sentenceContainer">
+              <div class="sentence-group">
+                <label>Sentence 1</label>
+                <input type="text" class="sentence-input" placeholder="e.g. The catalyst was calcined at 500°C for 4 hours.">
+              </div>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn" id="addSentenceBtn">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Add sentence
+              </button>
+            </div>
+          </div>
+
+          <!-- Panel: Audio -->
+          <div class="mode-panel" id="panelAudio">
+            <p class="audio-hint">
+              Hit <strong style="color:var(--text)">Record</strong> on each slot and speak freely.
+              The label field is optional — add it if you want to note what you said, but it's not required.
+            </p>
+
+            <div class="rec-list" id="recList">
+              <!-- populated by JS -->
+            </div>
+
+            <div class="audio-footer">
+              <div>
+                <button type="button" class="btn" id="addRecSlotBtn">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Add another clip
+                </button>
+              </div>
+              <div class="upload-row" id="uploadRow">
+                <button class="btn-submit" id="uploadAudioBtn" type="button" disabled
+                  style="background:linear-gradient(135deg,var(--accent2),#0ea5e9);">
+                  Upload recordings →
+                </button>
+                <div class="upload-progress" id="uploadProgress">
+                  <div class="upload-bar" id="uploadBar"></div>
+                </div>
+                <p class="status-msg" id="audioStatus"></p>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end Step 01 -->
+
+        <!-- STEP 02 -->
+        <div class="card fade-up d2">
+          <div class="card-header">
+            <span class="step-pill">Step 02</span>
+            <span class="card-title">Your Details</span>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" type="email" placeholder="you@university.edu" required>
+          </div>
+          <div class="field">
+            <label for="occupation">Occupation</label>
+            <select id="occupation" required>
+              <option value="" disabled selected>Select your role</option>
+              <option value="phd_student">PhD Student</option>
+              <option value="postdoc">Postdoc</option>
+              <option value="professor">Professor</option>
+              <option value="engineer">Engineer</option>
+              <option value="industry_researcher">Industry Researcher</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="university">University / Organization</label>
+            <input id="university" type="text" placeholder="e.g. FAU Erlangen-Nürnberg" required>
+          </div>
+          <div class="btn-row">
+            <button class="btn-submit" id="submitBtn" type="button">Submit →</button>
+          </div>
+          <p class="status-msg" id="submitStatus"></p>
         </div>
-        <p class="hint">
-          Provide example sentences you'd use when documenting synthesis
-          or experimental procedures in your daily lab work.
-        </p>
-        <div id="sentenceContainer">
-          <div class="sentence-group">
-            <label>Sentence 1</label>
-            <input type="text" class="sentence-input" placeholder="e.g. The catalyst was calcined at 500°C for 4 hours.">
+
+        <!-- Counter -->
+        <div class="counter-card fade-up d3">
+          <div class="counter-icon">📡</div>
+          <div class="counter-body">
+            <div class="counter-label">Total sentence uploads</div>
+            <div class="counter-num" id="counterDisplay">—</div>
+            <div class="live-badge"><span class="live-dot"></span>Live · updates on submit</div>
           </div>
         </div>
-        <div class="btn-row">
-          <button type="button" class="btn" id="addSentenceBtn">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Add sentence
-          </button>
-        </div>
-      </div>
 
-      <div class="card fade-up d2">
-        <div class="card-header">
-          <span class="step-pill">Step 02</span>
-          <span class="card-title">Your Details</span>
+        <!-- Privacy -->
+        <div class="privacy-card fade-up d4">
+          <h3>🔒 Data use &amp; privacy notice</h3>
+          <p>
+            By submitting, you agree that your <b>sentences</b> and any <b>voice recordings</b> may be
+            used to train and evaluate speech recognition models for research purposes. Contributions
+            will <b>not</b> be published as part of the released public model and are stored in
+            <b>anonymized</b> form. Your <b>email</b> and <b>organization</b> are used only for
+            submission tracking and are never shared publicly.
+          </p>
         </div>
-        <div class="field">
-          <label for="email">Email address</label>
-          <input id="email" type="email" placeholder="you@university.edu" required>
-        </div>
-        <div class="field">
-          <label for="occupation">Occupation</label>
-          <select id="occupation" required>
-            <option value="" disabled selected>Select your role</option>
-            <option value="phd_student">PhD Student</option>
-            <option value="postdoc">Postdoc</option>
-            <option value="professor">Professor</option>
-            <option value="engineer">Engineer</option>
-            <option value="industry_researcher">Industry Researcher</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="university">University / Organization</label>
-          <input id="university" type="text" placeholder="e.g. FAU Erlangen-Nürnberg" required>
-        </div>
-        <div class="btn-row">
-          <button class="btn-submit" id="submitSentencesBtn" type="button">Submit →</button>
-        </div>
-        <p class="status-msg" id="sentencesStatus"></p>
-      </div>
 
-      <div class="counter-card fade-up d3">
-        <div class="counter-icon">📡</div>
-        <div class="counter-body">
-          <div class="counter-label">Total sentence uploads</div>
-          <div class="counter-num" id="counterDisplay">—</div>
-          <div class="live-badge">
-            <span class="live-dot"></span>
-            Live · updates on submit
-          </div>
-        </div>
       </div>
-
-      <div class="privacy-card fade-up d4">
-        <h3>🔒 Data use &amp; privacy notice</h3>
-        <p>
-          By submitting, you agree that your <b>sentences</b> may be used to train and evaluate speech
-          recognition models for research purposes. Your sentences will <b>not</b> be published as part
-          of the released public model. We will store and process your contribution in an <b>anonymized</b>
-          form and keep it confidential.<br><br>
-          Your <b>email</b> and <b>organization</b> are collected only for submission tracking and
-          potential follow-up; they are <b>not</b> used for model training and are not shared publicly.
-        </p>
-      </div>
-
-    </div>
-  </section>
-  </div><!-- end .main-content -->
+    </section>
+  </div>
 </div>
 
 <script>
+// ─── Config ───────────────────────────────────────────────────────────────────
 const API_BASE             = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
 const SUBMIT_TEXT_ENDPOINT = API_BASE + "/submit_text";
 const GET_COUNT_ENDPOINT   = API_BASE + "/get_count";
+const GET_UPLOAD_URL_EP    = API_BASE + "/get_upload_url"; // POST → { upload_url }
 
+// ─── Submission ID ────────────────────────────────────────────────────────────
 function makeId() {
-  const d = new Date();
-  const rand = Math.random().toString(16).slice(2,8).toUpperCase();
-  return `FAU-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${rand}`;
+  const d = new Date(), r = Math.random().toString(16).slice(2,8).toUpperCase();
+  return `FAU-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${r}`;
 }
 const sid = makeId();
 
+// ─── Counter ──────────────────────────────────────────────────────────────────
 async function loadCounter() {
   try {
     const r = await fetch(GET_COUNT_ENDPOINT);
     if (!r.ok) throw new Error();
-    const data = await r.json();
-    document.getElementById("counterDisplay").textContent = data.count;
-  } catch {
-    document.getElementById("counterDisplay").textContent = "—";
-  }
+    document.getElementById("counterDisplay").textContent = (await r.json()).count;
+  } catch { document.getElementById("counterDisplay").textContent = "—"; }
 }
 loadCounter();
 
-const container = document.getElementById("sentenceContainer");
-function updateLabels() {
-  container.querySelectorAll(".sentence-group").forEach((group, i) => {
-    group.querySelector("label").textContent = `Sentence ${i + 1}`;
-    let btn = group.querySelector(".remove-btn");
-    if (i === 0) { btn?.remove(); return; }
-    if (!btn) {
-      btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "remove-btn";
-      btn.textContent = "×";
-      btn.addEventListener("click", () => { group.remove(); updateLabels(); });
-      group.appendChild(btn);
+// ─── Mode toggle ──────────────────────────────────────────────────────────────
+let activeMode = "type";
+document.getElementById("modeTypeBtn").addEventListener("click",  () => setMode("type"));
+document.getElementById("modeAudioBtn").addEventListener("click", () => setMode("audio"));
+
+function setMode(mode) {
+  activeMode = mode;
+  document.getElementById("modeTypeBtn").classList.toggle("active",  mode === "type");
+  document.getElementById("modeAudioBtn").classList.toggle("active", mode === "audio");
+  document.getElementById("panelType").classList.toggle("visible",   mode === "type");
+  document.getElementById("panelAudio").classList.toggle("visible",  mode === "audio");
+}
+
+// ─── TEXT MODE ────────────────────────────────────────────────────────────────
+const sentCont = document.getElementById("sentenceContainer");
+
+function updateTextLabels() {
+  sentCont.querySelectorAll(".sentence-group").forEach((g, i) => {
+    g.querySelector("label").textContent = `Sentence ${i + 1}`;
+    let rb = g.querySelector(".remove-btn");
+    if (i === 0) { rb?.remove(); return; }
+    if (!rb) {
+      rb = document.createElement("button");
+      rb.type = "button"; rb.className = "remove-btn"; rb.textContent = "×";
+      rb.addEventListener("click", () => { g.remove(); updateTextLabels(); });
+      g.appendChild(rb);
     }
   });
 }
-
 document.getElementById("addSentenceBtn").addEventListener("click", () => {
-  const wrapper = document.createElement("div");
-  wrapper.className = "sentence-group";
-  wrapper.innerHTML = `<label>Sentence</label><input type="text" class="sentence-input" placeholder="Type a lab sentence…">`;
-  container.appendChild(wrapper);
-  updateLabels();
-  wrapper.querySelector("input").focus();
+  const w = document.createElement("div");
+  w.className = "sentence-group";
+  w.innerHTML = `<label>Sentence</label><input type="text" class="sentence-input" placeholder="Type a lab sentence…">`;
+  sentCont.appendChild(w);
+  updateTextLabels();
+  w.querySelector("input").focus();
 });
-updateLabels();
+updateTextLabels();
 
-function collectDetailsOrAlert() {
+function getTextSentences() {
+  return [...document.querySelectorAll(".sentence-input")].map(i => i.value.trim()).filter(Boolean);
+}
+
+// ─── AUDIO MODE ───────────────────────────────────────────────────────────────
+// Each slot: { id, blob, recorder, timerInterval, active }
+let recSlots = [];   // array of slot objects (in display order)
+let slotCounter = 0; // unique IDs so DOM ids stay stable across rebuilds
+
+function addSlot() {
+  const id = slotCounter++;
+  const slot = { id, blob: null, recorder: null, timerInterval: null, active: false };
+  recSlots.push(slot);
+  renderSlot(slot);
+  updateUploadBtn();
+  return slot;
+}
+
+function removeSlot(id) {
+  // stop any active recording first
+  const slot = recSlots.find(s => s.id === id);
+  if (slot?.recorder && slot.recorder.state !== "inactive") slot.recorder.stop();
+  recSlots = recSlots.filter(s => s.id !== id);
+  document.getElementById(`slot-${id}`)?.remove();
+  renumberSlots();
+  updateUploadBtn();
+}
+
+function renumberSlots() {
+  document.querySelectorAll(".rec-item[data-slot]").forEach((el, i) => {
+    el.querySelector(".rec-item-num").textContent = `${i + 1}.`;
+  });
+}
+
+function renderSlot(slot) {
+  const list = document.getElementById("recList");
+  const el   = document.createElement("div");
+  el.className = "rec-item";
+  el.id = `slot-${slot.id}`;
+  el.dataset.slot = slot.id;
+
+  el.innerHTML = `
+    <div class="rec-item-top">
+      <span class="rec-item-num">${recSlots.indexOf(slot) + 1}.</span>
+      <input class="rec-label-input" type="text" placeholder="Optional label (e.g. 'catalyst reduction')">
+      ${recSlots.length > 1
+        ? `<button class="rec-remove-btn" title="Remove">×</button>`
+        : ''}
+    </div>
+    <div class="rec-item-controls">
+      <button class="btn-rec-small start-rec" data-role="start">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>
+        Record
+      </button>
+      <button class="btn-rec-small stop-rec" data-role="stop" style="display:none" disabled>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor"/></svg>
+        Stop
+      </button>
+      <span class="rec-timer" id="rt-${slot.id}">0:00</span>
+      <div class="rec-wave" id="rw-${slot.id}">
+        <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+        <div class="wb"></div><div class="wb"></div>
+      </div>
+      <audio class="rec-preview" id="rp-${slot.id}" controls></audio>
+    </div>`;
+
+  const startBtn = el.querySelector("[data-role='start']");
+  const stopBtn  = el.querySelector("[data-role='stop']");
+  const timer    = el.querySelector(`#rt-${slot.id}`);
+  const wave     = el.querySelector(`#rw-${slot.id}`);
+  const preview  = el.querySelector(`#rp-${slot.id}`);
+  const removeBtn = el.querySelector(".rec-remove-btn");
+
+  if (removeBtn) removeBtn.addEventListener("click", () => removeSlot(slot.id));
+  startBtn.addEventListener("click", () => startRec(slot, el, startBtn, stopBtn, timer, wave, preview));
+  stopBtn.addEventListener("click",  () => stopRec(slot));
+
+  list.appendChild(el);
+}
+
+async function startRec(slot, el, startBtn, stopBtn, timer, wave, preview) {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mime   = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4']
+                     .find(m => MediaRecorder.isTypeSupported(m)) || '';
+    const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
+    const chunks   = [];
+
+    recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+    recorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      clearInterval(slot.timerInterval);
+      slot.blob     = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
+      slot.active   = false;
+      slot.recorder = null;
+
+      preview.src = URL.createObjectURL(slot.blob);
+      preview.classList.add("visible");
+      el.classList.remove("active"); el.classList.add("done");
+
+      startBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 2l7 7M9 2L2 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Re-record`;
+      startBtn.className = "btn-rec-small redo-rec";
+      startBtn.disabled = false;
+      stopBtn.style.display = "none"; stopBtn.disabled = true;
+      timer.classList.remove("visible"); wave.classList.remove("visible");
+
+      // update remove button visibility (re-render isn't needed, just show it if hidden)
+      if (!el.querySelector(".rec-remove-btn") && recSlots.length > 1) {
+        const rb = document.createElement("button");
+        rb.className = "rec-remove-btn"; rb.title = "Remove"; rb.textContent = "×";
+        rb.addEventListener("click", () => removeSlot(slot.id));
+        el.querySelector(".rec-item-top").appendChild(rb);
+      }
+
+      updateUploadBtn();
+    };
+
+    recorder.start(100);
+    slot.recorder = recorder; slot.active = true;
+
+    el.classList.add("active");
+    startBtn.disabled = true;
+    stopBtn.style.display = "inline-flex"; stopBtn.disabled = false;
+    timer.classList.add("visible"); wave.classList.add("visible");
+
+    let secs = 0;
+    slot.timerInterval = setInterval(() => {
+      secs++;
+      timer.textContent = `${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
+    }, 1000);
+
+  } catch(err) {
+    alert("Microphone access denied. Please allow microphone access and try again.");
+    console.error(err);
+  }
+}
+
+function stopRec(slot) {
+  if (slot.recorder && slot.recorder.state !== "inactive") {
+    clearInterval(slot.timerInterval);
+    slot.recorder.stop();
+  }
+}
+
+function updateUploadBtn() {
+  const recorded = recSlots.filter(s => s.blob).length;
+  const btn = document.getElementById("uploadAudioBtn");
+  btn.disabled = recorded === 0;
+  btn.textContent = recorded > 0
+    ? `Upload ${recorded} recording${recorded > 1 ? 's' : ''} →`
+    : "Upload recordings →";
+}
+
+document.getElementById("addRecSlotBtn").addEventListener("click", () => {
+  const slot = addSlot();
+  // scroll to new slot
+  document.getElementById(`slot-${slot.id}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+});
+
+// ─── Upload to S3 ─────────────────────────────────────────────────────────────
+document.getElementById("uploadAudioBtn").addEventListener("click", async () => {
+  const statusEl   = document.getElementById("audioStatus");
+  const btn        = document.getElementById("uploadAudioBtn");
+  const progressEl = document.getElementById("uploadProgress");
+  const barEl      = document.getElementById("uploadBar");
+  statusEl.textContent = ""; statusEl.className = "status-msg";
+
+  const details = collectDetails(); if (!details) return;
+  const toUpload = recSlots.filter(s => s.blob);
+  if (!toUpload.length) { alert("No recordings to upload yet."); return; }
+
+  btn.disabled = true; progressEl.classList.add("visible"); barEl.style.width = "0%";
+  let done = 0, errors = [];
+
+  for (const slot of toUpload) {
+    statusEl.textContent = `Uploading ${done + 1} / ${toUpload.length}…`;
+    // grab optional label from the slot's input
+    const label = document.getElementById(`slot-${slot.id}`)
+                    ?.querySelector(".rec-label-input")?.value.trim() || "";
+    try {
+      const urlRes = await fetch(GET_UPLOAD_URL_EP, {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          submission_id: details.submission_id,
+          slot_index:    recSlots.indexOf(slot),
+          label,                                    // optional, may be empty
+          content_type:  slot.blob.type || "audio/webm"
+        })
+      });
+      if (!urlRes.ok) throw new Error(await urlRes.text());
+      const { upload_url } = await urlRes.json();
+      const put = await fetch(upload_url, {
+        method: "PUT", body: slot.blob,
+        headers: { "Content-Type": slot.blob.type || "audio/webm" }
+      });
+      if (!put.ok) throw new Error(`S3 HTTP ${put.status}`);
+      done++;
+      barEl.style.width = `${Math.round(done / toUpload.length * 100)}%`;
+    } catch(e) { errors.push(e.message); console.error(e); }
+  }
+
+  statusEl.textContent = errors.length === 0
+    ? `✓ ${done} recording${done > 1 ? 's' : ''} uploaded — thank you!`
+    : `⚠ ${done} uploaded, ${errors.length} failed. Check console.`;
+  statusEl.className = errors.length === 0 ? "status-msg ok" : "status-msg err";
+  btn.disabled = false;
+});
+
+// ─── Details ──────────────────────────────────────────────────────────────────
+function collectDetails() {
   const email      = document.getElementById("email").value.trim();
   const occupation = document.getElementById("occupation").value;
   const university = document.getElementById("university").value.trim();
   if (!email || !occupation || !university) {
-    alert("Please complete Step 1 (Email, Occupation, University/Organization).");
+    alert("Please fill in Step 02 (Email, Occupation, University / Organization).");
     return null;
   }
   return { submission_id: sid, email, occupation, university };
 }
-function collectSentences() {
-  return [...document.querySelectorAll(".sentence-input")]
-    .map(i => i.value.trim()).filter(Boolean);
-}
 
-document.getElementById("submitSentencesBtn").addEventListener("click", async () => {
-  const statusEl = document.getElementById("sentencesStatus");
-  const btn      = document.getElementById("submitSentencesBtn");
-  statusEl.textContent = "";
-  statusEl.className = "status-msg";
-  const details = collectDetailsOrAlert();
-  if (!details) return;
-  const sentences = collectSentences();
-  if (!sentences.length) { alert("Please enter at least one sentence."); return; }
-  btn.disabled = true;
-  statusEl.textContent = "Submitting…";
-  try {
-    const r = await fetch(SUBMIT_TEXT_ENDPOINT, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ ...details, sentences, timestamp: new Date().toISOString() })
-    });
-    if (!r.ok) throw new Error(await r.text());
-    statusEl.textContent = "✓ Submitted — thank you!";
-    statusEl.className = "status-msg ok";
-    loadCounter();
-  } catch (e) {
-    statusEl.textContent = "✗ Failed — please try again.";
-    statusEl.className = "status-msg err";
-    console.error(e);
-  } finally {
-    btn.disabled = false;
+// ─── Submit (Step 02) ─────────────────────────────────────────────────────────
+document.getElementById("submitBtn").addEventListener("click", async () => {
+  const statusEl = document.getElementById("submitStatus");
+  const btn      = document.getElementById("submitBtn");
+  statusEl.textContent = ""; statusEl.className = "status-msg";
+
+  const details = collectDetails(); if (!details) return;
+
+  if (activeMode === "type") {
+    // text mode requires at least one sentence
+    const sentences = getTextSentences();
+    if (!sentences.length) { alert("Please enter at least one sentence in Step 01."); return; }
+
+    btn.disabled = true; statusEl.textContent = "Submitting…";
+    try {
+      const r = await fetch(SUBMIT_TEXT_ENDPOINT, {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...details, sentences, mode: "type", timestamp: new Date().toISOString() })
+      });
+      if (!r.ok) throw new Error(await r.text());
+      statusEl.textContent = "✓ Submitted — thank you!";
+      statusEl.className = "status-msg ok";
+      loadCounter();
+    } catch(e) {
+      statusEl.textContent = "✗ Failed — please try again.";
+      statusEl.className = "status-msg err";
+      console.error(e);
+    } finally { btn.disabled = false; }
+
+  } else {
+    // audio mode: just submit the user's details so you know who contributed
+    // actual audio files are uploaded separately via the Upload button
+    const recorded = recSlots.filter(s => s.blob).length;
+    if (recorded === 0) {
+      alert("Please record at least one audio clip before submitting.");
+      return;
+    }
+    btn.disabled = true; statusEl.textContent = "Submitting…";
+    try {
+      const r = await fetch(SUBMIT_TEXT_ENDPOINT, {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...details, sentences: [], mode: "audio", audio_clip_count: recorded, timestamp: new Date().toISOString() })
+      });
+      if (!r.ok) throw new Error(await r.text());
+      statusEl.textContent = "✓ Details saved. Don't forget to upload your recordings above!";
+      statusEl.className = "status-msg ok";
+      loadCounter();
+    } catch(e) {
+      statusEl.textContent = "✗ Failed — please try again.";
+      statusEl.className = "status-msg err";
+      console.error(e);
+    } finally { btn.disabled = false; }
   }
 });
+
+// ─── Init: one default recording slot ────────────────────────────────────────
+addSlot();
 </script>
 </body>
 </html>
