@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Domain-Specific ASR – Sentence Submission</title>
+<title>Domain-Specific ASR – Contribution Page</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -21,8 +21,8 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
 
-.bg-canvas { position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none; }
-.blob { position:absolute;border-radius:50%;filter:blur(120px);will-change:transform; }
+.bg-canvas { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+.blob { position:absolute; border-radius:50%; filter:blur(120px); will-change:transform; }
 .blob-1{width:550px;height:550px;background:radial-gradient(circle,#f472b6,transparent 70%);top:-180px;left:-120px;opacity:.1;animation:drift1 20s ease-in-out infinite alternate;}
 .blob-2{width:480px;height:480px;background:radial-gradient(circle,#818cf8,transparent 70%);top:25%;right:-80px;opacity:.1;animation:drift2 16s ease-in-out infinite alternate;}
 .blob-3{width:600px;height:600px;background:radial-gradient(circle,#6366f1,transparent 70%);bottom:-180px;left:25%;opacity:.08;animation:drift3 22s ease-in-out infinite alternate;}
@@ -111,7 +111,6 @@ select option{background:#111118;}
 .status-msg.ok{color:var(--accent2);}
 .status-msg.err{color:#f87171;}
 
-/* ── Mode selector ── */
 .mode-selector{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
 .mode-option{position:relative;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);padding:20px 22px;cursor:pointer;transition:border-color .25s,background .25s,box-shadow .25s,transform .18s;user-select:none;overflow:hidden;}
 .mode-option::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px;opacity:0;transition:opacity .25s;}
@@ -122,7 +121,7 @@ select option{background:#111118;}
 .mode-option.audio-opt.active{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.05);box-shadow:0 8px 32px rgba(52,211,153,.1);transform:translateY(-2px);}
 .mode-option.active::before{opacity:1;}
 .mode-icon{font-size:1.6rem;line-height:1;margin-bottom:10px;display:block;}
-.mode-title{font-size:.95rem;font-weight:600;margin-bottom:5px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;}
+.mode-title{font-size:.95rem;font-weight:600;margin-bottom:5px;letter-spacing:-.01em;}
 .mode-option.type-opt .mode-title{color:var(--accent);}
 .mode-option.audio-opt .mode-title{color:var(--accent2);}
 .mode-desc{font-size:.78rem;color:var(--muted);line-height:1.55;}
@@ -137,7 +136,6 @@ select option{background:#111118;}
 
 .audio-hint{font-size:.82rem;color:var(--muted);background:rgba(52,211,153,.04);border-left:2px solid rgba(52,211,153,.3);padding:10px 14px;border-radius:0 8px 8px 0;line-height:1.6;margin-bottom:20px;}
 
-/* ── Recorder items ── */
 .rec-item{border:1px solid rgba(255,255,255,.06);border-radius:12px;background:rgba(0,0,0,.18);padding:14px 18px;margin-bottom:8px;transition:border-color .2s,background .2s;}
 .rec-item.active{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.04);}
 .rec-item.done{border-color:rgba(52,211,153,.25);background:rgba(52,211,153,.03);}
@@ -165,14 +163,12 @@ select option{background:#111118;}
 .rec-wave .wb:nth-child(4){height:14px;animation:waveBar .8s ease-in-out infinite .30s}
 .rec-wave .wb:nth-child(5){height:9px;animation:waveBar .8s ease-in-out infinite .40s}
 .rec-wave:not(.visible) .wb{animation-play-state:paused;}
-.rec-preview{width:190px;height:28px;opacity:.8;display:none;}
-.rec-preview.visible{display:block;}
-.upload-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06);}
-.upload-progress{flex:1;min-width:160px;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;display:none;}
-.upload-progress.visible{display:block;}
+.rec-preview{width:190px;height:28px;opacity:.8;display:block;}
+.progress-wrap{margin-top:18px;display:none;}
+.progress-wrap.visible{display:block;}
+.upload-progress{width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;}
 .upload-bar{height:100%;width:0%;border-radius:2px;background:linear-gradient(90deg,var(--accent2),#0ea5e9);transition:width .3s ease;}
 
-/* ── Counter ── */
 .counter-card{background:linear-gradient(135deg,rgba(244,114,182,.06),rgba(129,140,248,.06) 50%,rgba(52,211,153,.04));border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 32px;display:flex;align-items:center;gap:24px;}
 .counter-icon{font-size:2.2rem;line-height:1;flex-shrink:0;}
 .counter-body{flex:1;}
@@ -181,7 +177,6 @@ select option{background:#111118;}
 .live-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:var(--accent2);border:1px solid rgba(52,211,153,.2);background:rgba(52,211,153,.06);padding:3px 9px;border-radius:20px;margin-top:7px;}
 .live-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:blink 2s ease-in-out infinite;}
 
-/* ── Privacy ── */
 .privacy-card{border:1px dashed rgba(255,255,255,.07);border-radius:14px;padding:22px 28px;background:rgba(0,0,0,.15);}
 .privacy-card h3{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:7px;}
 .privacy-card p{font-size:.82rem;color:rgba(107,114,128,.85);line-height:1.75;}
@@ -196,8 +191,10 @@ select option{background:#111118;}
 <body>
 
 <div class="bg-canvas">
-  <div class="blob blob-1"></div><div class="blob blob-2"></div>
-  <div class="blob blob-3"></div><div class="blob blob-4"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
 </div>
 <div class="bg-grid"></div>
 
@@ -225,7 +222,8 @@ select option{background:#111118;}
 
     <section class="demo-section">
       <div class="section-heading">
-        <h2>Model Performance</h2><span class="tag">Demo</span>
+        <h2>Model Performance</h2>
+        <span class="tag">Demo</span>
       </div>
       <div class="table-wrap">
         <table class="demo-table">
@@ -257,7 +255,6 @@ select option{background:#111118;}
 
       <div class="form-stack">
 
-        <!-- ══ STEP 01 ══ -->
         <div class="card blue fade-up d1">
           <div class="card-header">
             <span class="step-pill">Step 01</span>
@@ -273,8 +270,9 @@ select option{background:#111118;}
               </div>
               <span class="mode-icon">✍️</span>
               <div class="mode-title">Type Sentences</div>
-              <div class="mode-desc">Write lab sentences as you'd dictate them. Quick &amp; easy — no microphone needed.</div>
+              <div class="mode-desc">Write example synthesis or lab-work sentences.</div>
             </div>
+
             <div class="mode-option audio-opt" id="modeAudioBtn">
               <div class="mode-check">
                 <svg class="mode-check-svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
@@ -283,67 +281,62 @@ select option{background:#111118;}
               </div>
               <span class="mode-icon">🎙️</span>
               <div class="mode-title">Record Audio</div>
-              <div class="mode-desc">Speak your sentences aloud. Paired voice + text gives the model a much stronger signal.</div>
+              <div class="mode-desc">Record one or more audio clips. No text is required in this mode.</div>
             </div>
           </div>
 
-          <!-- Panel: Type -->
           <div class="mode-panel visible" id="panelType">
-            <p class="hint">Provide example sentences you'd use when documenting synthesis or experimental procedures in your daily lab work.</p>
+            <p class="hint">
+              Provide example sentences you would use when documenting synthesis
+              or experimental procedures in your daily lab work.
+            </p>
+
             <div id="textSentenceContainer">
               <div class="sentence-group">
                 <label>Sentence 1</label>
                 <input type="text" class="text-sentence-input" placeholder="e.g. The catalyst was calcined at 500°C for 4 hours.">
               </div>
             </div>
+
             <div class="btn-row">
               <button type="button" class="btn" id="addTextSentenceBtn">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
                 Add sentence
               </button>
             </div>
           </div>
 
-          <!-- Panel: Audio -->
           <div class="mode-panel" id="panelAudio">
-            <p class="audio-hint">Type each sentence below, then hit <strong style="color:var(--text)">Record</strong> to read it aloud. Both text and voice will be submitted as paired training data.</p>
-            <div id="audioSentenceContainer">
-              <div class="sentence-group">
-                <label>Sentence 1</label>
-                <input type="text" class="audio-sentence-input" placeholder="e.g. The catalyst was calcined at 500°C for 4 hours.">
-              </div>
-            </div>
-            <div class="btn-row" style="margin-top:12px;margin-bottom:0;">
-              <button type="button" class="btn" id="addAudioSentenceBtn">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                Add sentence
-              </button>
-            </div>
-            <div id="recList" style="margin-top:20px;"></div>
-            <div class="upload-row" id="uploadRow" style="display:none;">
-              <button class="btn-submit" id="uploadAudioBtn" type="button" disabled
-                style="background:linear-gradient(135deg,var(--accent2),#0ea5e9);">
-                Upload recordings →
-              </button>
-              <div class="upload-progress" id="uploadProgress">
+            <p class="audio-hint">
+              Record one or more audio clips. When you click <strong style="color:var(--text)">Submit</strong>,
+              the clips will be uploaded automatically.
+            </p>
+
+            <div id="recList"></div>
+
+            <div class="progress-wrap" id="audioProgressWrap">
+              <div class="upload-progress">
                 <div class="upload-bar" id="uploadBar"></div>
               </div>
-              <p class="status-msg" id="audioStatus"></p>
             </div>
+
+            <p class="status-msg" id="audioStatus"></p>
           </div>
+        </div>
 
-        </div><!-- end Step 01 -->
-
-        <!-- ══ STEP 02 ══ -->
         <div class="card fade-up d2">
           <div class="card-header">
             <span class="step-pill">Step 02</span>
             <span class="card-title">Your Details</span>
           </div>
+
           <div class="field">
             <label for="email">Email address</label>
             <input id="email" type="email" placeholder="you@university.edu" required>
           </div>
+
           <div class="field">
             <label for="occupation">Occupation</label>
             <select id="occupation" required>
@@ -356,27 +349,28 @@ select option{background:#111118;}
               <option value="other">Other</option>
             </select>
           </div>
+
           <div class="field">
             <label for="university">University / Organization</label>
             <input id="university" type="text" placeholder="e.g. FAU Erlangen-Nürnberg" required>
           </div>
+
           <div class="btn-row">
             <button class="btn-submit" id="submitBtn" type="button">Submit →</button>
           </div>
+
           <p class="status-msg" id="submitStatus"></p>
         </div>
 
-        <!-- Counter -->
         <div class="counter-card fade-up d3">
           <div class="counter-icon">📡</div>
           <div class="counter-body">
-            <div class="counter-label">Total sentence uploads</div>
+            <div class="counter-label">Total uploads</div>
             <div class="counter-num" id="counterDisplay">—</div>
             <div class="live-badge"><span class="live-dot"></span>Live · updates on submit</div>
           </div>
         </div>
 
-        <!-- Privacy -->
         <div class="privacy-card fade-up d4">
           <h3>🔒 Data use &amp; privacy notice</h3>
           <p>
@@ -394,383 +388,441 @@ select option{background:#111118;}
 </div>
 
 <script>
-// ─── API endpoints ────────────────────────────────────────────────────────────
-const API_BASE            = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
-const GET_COUNT_ENDPOINT  = API_BASE + "/get_count";
-const SUBMIT_TEXT_EP      = API_BASE + "/submit_text";
-const PRESIGN_EP          = API_BASE + "/presign";
-const SUBMIT_AUDIO_EP     = API_BASE + "/submit_audio";
+// ─────────────────────────────────────────────────────────────────────────────
+// API
+// ─────────────────────────────────────────────────────────────────────────────
+const API_BASE = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com"; // add your API Gateway base URL here if needed
+const GET_COUNT_ENDPOINT = API_BASE + "/get_count";
+const SUBMIT_TEXT_EP     = API_BASE + "/submit_text";
+const PRESIGN_EP         = API_BASE + "/presign";
+const SUBMIT_AUDIO_EP    = API_BASE + "/submit_audio";
 
-// ─── Submission ID ────────────────────────────────────────────────────────────
-function makeId() {
-  const d = new Date(), r = Math.random().toString(16).slice(2,8).toUpperCase();
-  return `FAU-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${r}`;
-}
-const sid = makeId();
-
-// ─── Counter ──────────────────────────────────────────────────────────────────
-async function loadCounter() {
-  try {
-    const r = await fetch(GET_COUNT_ENDPOINT);
-    if (!r.ok) throw new Error();
-    document.getElementById("counterDisplay").textContent = (await r.json()).count;
-  } catch {
-    document.getElementById("counterDisplay").textContent = "—";
-  }
-}
-loadCounter();
-
-// ─── Mode toggle ──────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// State
+// ─────────────────────────────────────────────────────────────────────────────
 let activeMode = "type";
+const submissionId = makeId();
 
-document.getElementById("modeTypeBtn").addEventListener("click",  () => setMode("type"));
-document.getElementById("modeAudioBtn").addEventListener("click", () => setMode("audio"));
+let audioClips = [];
+let mediaRecorder = null;
+let currentStream = null;
+let currentChunks = [];
+let recording = false;
+let timerInterval = null;
+let recordingSeconds = 0;
 
-function setMode(mode) {
-  activeMode = mode;
-  document.getElementById("modeTypeBtn").classList.toggle("active",  mode === "type");
-  document.getElementById("modeAudioBtn").classList.toggle("active", mode === "audio");
-  document.getElementById("panelType").classList.toggle("visible",   mode === "type");
-  document.getElementById("panelAudio").classList.toggle("visible",  mode === "audio");
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+function makeId() {
+  const d = new Date();
+  const r = Math.random().toString(16).slice(2, 8).toUpperCase();
+  return `FAU-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}-${r}`;
 }
 
-// ─── Collect user details ─────────────────────────────────────────────────────
+function setStatus(el, msg, kind = "") {
+  el.textContent = msg;
+  el.className = "status-msg" + (kind ? ` ${kind}` : "");
+}
+
+function formatTime(totalSeconds) {
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function blobExt(blob) {
+  const t = blob.type || "";
+  if (t.includes("webm")) return "webm";
+  if (t.includes("wav")) return "wav";
+  if (t.includes("mp3")) return "mp3";
+  return "webm";
+}
+
 function collectDetails() {
-  const email      = document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value.trim();
   const occupation = document.getElementById("occupation").value;
   const university = document.getElementById("university").value.trim();
+
   if (!email || !occupation || !university) {
     alert("Please fill in Step 02 (Email, Occupation, University / Organization).");
     return null;
   }
-  return { submission_id: sid, email, occupation, university };
+
+  return {
+    submission_id: submissionId,
+    email,
+    occupation,
+    university
+  };
 }
 
-// ─── TEXT MODE ────────────────────────────────────────────────────────────────
-const textCont = document.getElementById("textSentenceContainer");
+// ─────────────────────────────────────────────────────────────────────────────
+// Counter
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadCounter() {
+  try {
+    const r = await fetch(GET_COUNT_ENDPOINT);
+    if (!r.ok) throw new Error("Failed to load counter");
+    const data = await r.json();
+    document.getElementById("counterDisplay").textContent = data.count ?? "—";
+  } catch (e) {
+    document.getElementById("counterDisplay").textContent = "—";
+    console.error("Counter error:", e);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Mode toggle
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById("modeTypeBtn").addEventListener("click", () => setMode("type"));
+document.getElementById("modeAudioBtn").addEventListener("click", () => setMode("audio"));
+
+function setMode(mode) {
+  activeMode = mode;
+
+  document.getElementById("modeTypeBtn").classList.toggle("active", mode === "type");
+  document.getElementById("modeAudioBtn").classList.toggle("active", mode === "audio");
+  document.getElementById("panelType").classList.toggle("visible", mode === "type");
+  document.getElementById("panelAudio").classList.toggle("visible", mode === "audio");
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Text mode
+// ─────────────────────────────────────────────────────────────────────────────
+const textContainer = document.getElementById("textSentenceContainer");
 
 function updateTextLabels() {
-  textCont.querySelectorAll(".sentence-group").forEach((g, i) => {
-    g.querySelector("label").textContent = `Sentence ${i + 1}`;
-    let rb = g.querySelector(".remove-btn");
-    if (i === 0) { rb?.remove(); return; }
-    if (!rb) {
-      rb = document.createElement("button");
-      rb.type = "button"; rb.className = "remove-btn"; rb.textContent = "×";
-      rb.addEventListener("click", () => { g.remove(); updateTextLabels(); });
-      g.appendChild(rb);
+  const groups = textContainer.querySelectorAll(".sentence-group");
+
+  groups.forEach((group, i) => {
+    group.querySelector("label").textContent = `Sentence ${i + 1}`;
+
+    let removeBtn = group.querySelector(".remove-btn");
+
+    if (i === 0) {
+      if (removeBtn) removeBtn.remove();
+      return;
+    }
+
+    if (!removeBtn) {
+      removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "remove-btn";
+      removeBtn.textContent = "×";
+      removeBtn.addEventListener("click", () => {
+        group.remove();
+        updateTextLabels();
+      });
+      group.appendChild(removeBtn);
     }
   });
 }
 
 document.getElementById("addTextSentenceBtn").addEventListener("click", () => {
-  const w = document.createElement("div");
-  w.className = "sentence-group";
-  w.innerHTML = `<label>Sentence</label><input type="text" class="text-sentence-input" placeholder="Type a lab sentence…">`;
-  textCont.appendChild(w);
+  const div = document.createElement("div");
+  div.className = "sentence-group";
+  div.innerHTML = `
+    <label>Sentence</label>
+    <input type="text" class="text-sentence-input" placeholder="Type a lab sentence…">
+  `;
+  textContainer.appendChild(div);
   updateTextLabels();
-  w.querySelector("input").focus();
+  div.querySelector("input").focus();
 });
-updateTextLabels();
 
 function getTextSentences() {
-  return [...textCont.querySelectorAll(".text-sentence-input")]
-    .map(i => i.value.trim()).filter(Boolean);
+  return [...textContainer.querySelectorAll(".text-sentence-input")]
+    .map(input => input.value.trim())
+    .filter(Boolean);
 }
 
-// ─── AUDIO MODE — sentence inputs ────────────────────────────────────────────
-const audioCont = document.getElementById("audioSentenceContainer");
+// ─────────────────────────────────────────────────────────────────────────────
+// Audio mode
+// ─────────────────────────────────────────────────────────────────────────────
+const recList = document.getElementById("recList");
+const audioStatus = document.getElementById("audioStatus");
+const audioProgressWrap = document.getElementById("audioProgressWrap");
+const uploadBar = document.getElementById("uploadBar");
 
-function updateAudioLabels() {
-  audioCont.querySelectorAll(".sentence-group").forEach((g, i) => {
-    g.querySelector("label").textContent = `Sentence ${i + 1}`;
-    let rb = g.querySelector(".remove-btn");
-    if (i === 0) { rb?.remove(); return; }
-    if (!rb) {
-      rb = document.createElement("button");
-      rb.type = "button"; rb.className = "remove-btn"; rb.textContent = "×";
-      rb.addEventListener("click", () => { g.remove(); updateAudioLabels(); rebuildRecList(); });
-      g.appendChild(rb);
-    }
+function renderAudioList() {
+  recList.innerHTML = "";
+
+  audioClips.forEach((clip, index) => {
+    const item = document.createElement("div");
+    item.className = "rec-item done";
+    item.innerHTML = `
+      <div class="rec-item-header">
+        <span class="rec-item-num">${index + 1}.</span>
+        <span class="rec-item-text">Recorded clip ${index + 1}</span>
+      </div>
+      <div class="rec-item-controls">
+        <audio class="rec-preview" controls src="${clip.url}"></audio>
+        <button type="button" class="btn-rec-small redo-rec">Delete</button>
+      </div>
+    `;
+
+    item.querySelector("button").addEventListener("click", () => {
+      URL.revokeObjectURL(clip.url);
+      audioClips.splice(index, 1);
+      renderAudioList();
+    });
+
+    recList.appendChild(item);
   });
-}
 
-document.getElementById("addAudioSentenceBtn").addEventListener("click", () => {
-  const w = document.createElement("div");
-  w.className = "sentence-group";
-  w.innerHTML = `<label>Sentence</label><input type="text" class="audio-sentence-input" placeholder="Type a lab sentence…">`;
-  audioCont.appendChild(w);
-  updateAudioLabels();
-  w.querySelector("input").focus();
-  rebuildRecList();
-});
-updateAudioLabels();
-audioCont.addEventListener("input", () => rebuildRecList());
-
-function getAudioSentences() {
-  return [...audioCont.querySelectorAll(".audio-sentence-input")]
-    .map(i => i.value.trim()).filter(Boolean);
-}
-
-// ─── AUDIO MODE — per-sentence recorder ──────────────────────────────────────
-const recState = {};  // index → { blob, recorder, timerInterval, active }
-
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function rebuildRecList() {
-  const sentences = getAudioSentences();
-  const list      = document.getElementById("recList");
-  const uploadRow = document.getElementById("uploadRow");
-  list.innerHTML  = "";
-  if (!sentences.length) { uploadRow.style.display = "none"; return; }
-  uploadRow.style.display = "flex";
-  sentences.forEach((text, i) => list.appendChild(buildRecItem(i, text)));
-  updateUploadBtn();
-}
-
-function buildRecItem(i, text) {
-  const done = !!recState[i]?.blob;
-  const el   = document.createElement("div");
-  el.className = "rec-item" + (done ? " done" : "");
-  el.innerHTML = `
+  const recorderItem = document.createElement("div");
+  recorderItem.className = "rec-item" + (recording ? " active" : "");
+  recorderItem.innerHTML = `
     <div class="rec-item-header">
-      <span class="rec-item-num">${i + 1}.</span>
-      <span class="rec-item-text">${esc(text)}</span>
+      <span class="rec-item-num">${audioClips.length + 1}.</span>
+      <span class="rec-item-text">Record a new audio clip</span>
     </div>
     <div class="rec-item-controls">
-      <button class="btn-rec-small ${done ? 'redo-rec' : 'start-rec'}" data-role="start">
-        ${done
-          ? `<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 2l7 7M9 2L2 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Re-record`
-          : `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg> Record`}
+      <button type="button" class="btn-rec-small start-rec" id="startRecBtn" ${recording ? "disabled" : ""}>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>
+        Record
       </button>
-      <button class="btn-rec-small stop-rec" data-role="stop" style="display:none" disabled>
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor"/></svg> Stop
+      <button type="button" class="btn-rec-small stop-rec" id="stopRecBtn" ${recording ? "" : "style='display:none' disabled"}>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" fill="currentColor"/></svg>
+        Stop
       </button>
-      <span class="rec-timer" id="rt-${i}">0:00</span>
-      <div class="rec-wave" id="rw-${i}">
-        <div class="wb"></div><div class="wb"></div><div class="wb"></div>
-        <div class="wb"></div><div class="wb"></div>
+      <span class="rec-timer ${recording ? "visible" : ""}" id="recTimer">${formatTime(recordingSeconds)}</span>
+      <div class="rec-wave ${recording ? "visible" : ""}">
+        <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
       </div>
-      <audio class="rec-preview ${done ? 'visible' : ''}" id="rp-${i}" controls
-        ${done ? `src="${URL.createObjectURL(recState[i].blob)}"` : ''}></audio>
-    </div>`;
+    </div>
+  `;
 
-  const startBtn = el.querySelector("[data-role='start']");
-  const stopBtn  = el.querySelector("[data-role='stop']");
-  const timer    = el.querySelector(`#rt-${i}`);
-  const wave     = el.querySelector(`#rw-${i}`);
-  const preview  = el.querySelector(`#rp-${i}`);
+  recList.appendChild(recorderItem);
 
-  startBtn.addEventListener("click", () => startRec(i, el, startBtn, stopBtn, timer, wave, preview));
-  stopBtn.addEventListener("click",  () => stopRec(i));
-  return el;
+  document.getElementById("startRecBtn").addEventListener("click", startRecording);
+  document.getElementById("stopRecBtn").addEventListener("click", stopRecording);
 }
 
-async function startRec(i, el, startBtn, stopBtn, timer, wave, preview) {
+async function startRecording() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const mime   = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4']
-                     .find(m => MediaRecorder.isTypeSupported(m)) || '';
-    const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
-    const chunks   = [];
+    currentStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-    recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-    recorder.onstop = () => {
-      stream.getTracks().forEach(t => t.stop());
-      clearInterval(recState[i]?.timerInterval);
-      const blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
-      recState[i] = { ...recState[i], blob, active: false };
+    const mimeType = ["audio/webm;codecs=opus", "audio/webm"]
+      .find(type => MediaRecorder.isTypeSupported(type));
 
-      preview.src = URL.createObjectURL(blob);
-      preview.classList.add("visible");
-      el.classList.remove("active"); el.classList.add("done");
-      startBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 2l7 7M9 2L2 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Re-record`;
-      startBtn.className = "btn-rec-small redo-rec";
-      startBtn.disabled  = false;
-      stopBtn.style.display = "none"; stopBtn.disabled = true;
-      timer.classList.remove("visible"); wave.classList.remove("visible");
-      updateUploadBtn();
+    mediaRecorder = mimeType
+      ? new MediaRecorder(currentStream, { mimeType })
+      : new MediaRecorder(currentStream);
+
+    currentChunks = [];
+    recording = true;
+    recordingSeconds = 0;
+
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data && event.data.size > 0) {
+        currentChunks.push(event.data);
+      }
     };
 
-    recorder.start(100);
-    recState[i] = { blob: recState[i]?.blob, recorder, chunks, active: true, timerInterval: null };
-    el.classList.add("active");
-    startBtn.disabled = true;
-    stopBtn.style.display = "inline-flex"; stopBtn.disabled = false;
-    timer.classList.add("visible"); wave.classList.add("visible");
+    mediaRecorder.onstop = () => {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+        currentStream = null;
+      }
 
-    let secs = 0;
-    recState[i].timerInterval = setInterval(() => {
-      secs++;
-      timer.textContent = `${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
+      clearInterval(timerInterval);
+      timerInterval = null;
+
+      const blob = new Blob(currentChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+      const url = URL.createObjectURL(blob);
+
+      audioClips.push({ blob, url });
+
+      mediaRecorder = null;
+      currentChunks = [];
+      recording = false;
+      recordingSeconds = 0;
+
+      renderAudioList();
+    };
+
+    mediaRecorder.start(100);
+
+    timerInterval = setInterval(() => {
+      recordingSeconds += 1;
+      const timerEl = document.getElementById("recTimer");
+      if (timerEl) timerEl.textContent = formatTime(recordingSeconds);
     }, 1000);
-  } catch(err) {
+
+    renderAudioList();
+  } catch (err) {
     alert("Microphone access denied. Please allow microphone access and try again.");
-    console.error(err);
+    console.error("Recording error:", err);
   }
 }
 
-function stopRec(i) {
-  const s = recState[i];
-  if (s?.recorder && s.recorder.state !== "inactive") {
-    clearInterval(s.timerInterval);
-    s.recorder.stop();
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
   }
 }
 
-function updateUploadBtn() {
-  const sentences = getAudioSentences();
-  const recorded  = sentences.filter((_, i) => recState[i]?.blob).length;
-  const btn = document.getElementById("uploadAudioBtn");
-  btn.disabled = recorded === 0;
-  btn.textContent = recorded > 0
-    ? `Upload ${recorded} recording${recorded > 1 ? 's' : ''} →`
-    : "Upload recordings →";
-}
+async function submitAudio(details) {
+  if (audioClips.length === 0) {
+    alert("Please record at least one clip.");
+    return;
+  }
 
-// ─── Upload audio ─────────────────────────────────────────────────────────────
-document.getElementById("uploadAudioBtn").addEventListener("click", async () => {
-  const statusEl   = document.getElementById("audioStatus");
-  const btn        = document.getElementById("uploadAudioBtn");
-  const progressEl = document.getElementById("uploadProgress");
-  const barEl      = document.getElementById("uploadBar");
-  statusEl.textContent = ""; statusEl.className = "status-msg";
-
-  const details = collectDetails(); if (!details) return;
-
-  const sentences = getAudioSentences();
-  const toUpload  = sentences
-    .map((_, i) => ({ i, blob: recState[i]?.blob }))
-    .filter(r => r.blob);
-
-  if (!toUpload.length) { alert("No recordings to upload yet."); return; }
-
-  btn.disabled = true;
-  progressEl.classList.add("visible");
-  barEl.style.width = "0%";
-  statusEl.textContent = "Getting upload URLs…";
+  setStatus(audioStatus, "");
+  audioProgressWrap.classList.add("visible");
+  uploadBar.style.width = "0%";
 
   try {
-    // ── Step 1: get presigned URLs for all files at once ──────────────────
-    console.log("▶ Requesting presigned URLs for", toUpload.length, "files");
+    setStatus(audioStatus, "Getting upload URLs...");
+
     const presignRes = await fetch(PRESIGN_EP, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         submission_id: details.submission_id,
-        files: toUpload.map(r => ({
-          ext:  r.blob.type.includes("wav") ? "wav"
-              : r.blob.type.includes("mp3") ? "mp3"
-              : "webm",
-          size: r.blob.size
+        files: audioClips.map(clip => ({
+          ext: blobExt(clip.blob),
+          size: clip.blob.size
         }))
       })
     });
-    console.log("▶ Presign status:", presignRes.status);
-    if (!presignRes.ok) throw new Error(await presignRes.text());
-    const { presigns } = await presignRes.json();
-    console.log("▶ Got presigns:", presigns);
 
-    // ── Step 2: upload each blob via presigned POST ───────────────────────
+    if (!presignRes.ok) {
+      const txt = await presignRes.text();
+      throw new Error(`Presign failed: ${txt}`);
+    }
+
+    const presignData = await presignRes.json();
+    const presigns = presignData.presigns || [];
+
+    if (presigns.length !== audioClips.length) {
+      throw new Error("Backend returned the wrong number of upload URLs.");
+    }
+
     const uploadedKeys = [];
-    for (let j = 0; j < toUpload.length; j++) {
-      statusEl.textContent = `Uploading ${j + 1} / ${toUpload.length}…`;
-      const { blob }        = toUpload[j];
-      const { key, upload } = presigns[j];  // upload = { url, fields }
 
-      console.log(`▶ Uploading file ${j} | key: ${key} | type: ${blob.type} | size: ${blob.size}`);
+    for (let i = 0; i < audioClips.length; i++) {
+      setStatus(audioStatus, `Uploading ${i + 1} / ${audioClips.length}...`);
+
+      const clip = audioClips[i];
+      const { key, upload } = presigns[i];
 
       const form = new FormData();
       Object.entries(upload.fields).forEach(([k, v]) => form.append(k, v));
-      form.append("file", blob);  // must be last
+      form.append("file", clip.blob, `recording_${i + 1}.${blobExt(clip.blob)}`);
 
-      const put = await fetch(upload.url, { method: "POST", body: form });
-      console.log(`▶ S3 response: ${put.status}`);
-      if (!put.ok) {
-        const txt = await put.text();
-        console.error("✗ S3 error:", txt);
-        throw new Error(`S3 upload failed (HTTP ${put.status})`);
+      const uploadRes = await fetch(upload.url, {
+        method: "POST",
+        body: form
+      });
+
+      if (!uploadRes.ok) {
+        const txt = await uploadRes.text();
+        throw new Error(`S3 upload failed: ${txt}`);
       }
 
       uploadedKeys.push(key);
-      barEl.style.width = `${Math.round((j + 1) / toUpload.length * 100)}%`;
+      uploadBar.style.width = `${Math.round(((i + 1) / audioClips.length) * 100)}%`;
     }
 
-    // ── Step 3: save metadata via submit_audio ────────────────────────────
-    statusEl.textContent = "Saving metadata…";
-    console.log("▶ Calling submit_audio with keys:", uploadedKeys);
+    setStatus(audioStatus, "Saving metadata...");
+
     const submitRes = await fetch(SUBMIT_AUDIO_EP, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         submission_id: details.submission_id,
-        email:         details.email,
-        occupation:    details.occupation,
-        university:    details.university,
-        audio_keys:    uploadedKeys,
-        timestamp:     new Date().toISOString()
-      })
-    });
-    console.log("▶ submit_audio status:", submitRes.status);
-    if (!submitRes.ok) throw new Error(await submitRes.text());
-
-    statusEl.textContent = `✓ ${uploadedKeys.length} recording${uploadedKeys.length > 1 ? 's' : ''} uploaded — thank you!`;
-    statusEl.className = "status-msg ok";
-    loadCounter();
-
-  } catch(e) {
-    statusEl.textContent = "✗ Upload failed — please try again.";
-    statusEl.className = "status-msg err";
-    console.error("Upload error:", e);
-  } finally {
-    btn.disabled = false;
-  }
-});
-
-// ─── Submit text ──────────────────────────────────────────────────────────────
-document.getElementById("submitBtn").addEventListener("click", async () => {
-  const statusEl = document.getElementById("submitStatus");
-  const btn      = document.getElementById("submitBtn");
-  statusEl.textContent = ""; statusEl.className = "status-msg";
-
-  const details = collectDetails(); if (!details) return;
-
-  // collect from whichever panel is active
-  const sentences = activeMode === "type" ? getTextSentences() : getAudioSentences();
-  if (!sentences.length) {
-    alert("Please enter at least one sentence in Step 01.");
-    return;
-  }
-
-  btn.disabled = true; statusEl.textContent = "Submitting…";
-  try {
-    const r = await fetch(SUBMIT_TEXT_EP, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        ...details,
-        sentences,
-        mode:      activeMode,
+        email: details.email,
+        occupation: details.occupation,
+        university: details.university,
+        audio_keys: uploadedKeys,
         timestamp: new Date().toISOString()
       })
     });
-    if (!r.ok) throw new Error(await r.text());
-    statusEl.textContent = "✓ Submitted — thank you!";
-    statusEl.className   = "status-msg ok";
+
+    if (!submitRes.ok) {
+      const txt = await submitRes.text();
+      throw new Error(`submit_audio failed: ${txt}`);
+    }
+
+    setStatus(audioStatus, `✓ ${uploadedKeys.length} recording${uploadedKeys.length > 1 ? "s" : ""} uploaded — thank you!`, "ok");
+    setStatus(document.getElementById("submitStatus"), "✓ Submitted — thank you!", "ok");
     loadCounter();
-  } catch(e) {
-    statusEl.textContent = "✗ Failed — please try again.";
-    statusEl.className   = "status-msg err";
-    console.error(e);
+
+  } catch (e) {
+    setStatus(audioStatus, `✗ Upload failed — ${e.message || e}`, "err");
+    throw e;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Submit
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById("submitBtn").addEventListener("click", async () => {
+  const submitBtn = document.getElementById("submitBtn");
+  const submitStatus = document.getElementById("submitStatus");
+
+  const details = collectDetails();
+  if (!details) return;
+
+  submitBtn.disabled = true;
+  setStatus(submitStatus, "Submitting...");
+
+  try {
+    if (activeMode === "type") {
+      const sentences = getTextSentences();
+
+      if (sentences.length === 0) {
+        alert("Please enter at least one sentence.");
+        submitBtn.disabled = false;
+        setStatus(submitStatus, "");
+        return;
+      }
+
+      const r = await fetch(SUBMIT_TEXT_EP, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          ...details,
+          sentences,
+          mode: "type",
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      if (!r.ok) {
+        const txt = await r.text();
+        throw new Error(txt);
+      }
+
+      setStatus(submitStatus, "✓ Submitted — thank you!", "ok");
+      loadCounter();
+
+    } else {
+      await submitAudio(details);
+    }
+
+  } catch (e) {
+    if (activeMode === "type") {
+      setStatus(submitStatus, `✗ Failed — ${e.message || e}`, "err");
+    } else {
+      setStatus(submitStatus, `✗ Failed — ${e.message || e}`, "err");
+    }
+    console.error("Submit error:", e);
   } finally {
-    btn.disabled = false;
+    submitBtn.disabled = false;
   }
 });
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
-rebuildRecList();
+// ─────────────────────────────────────────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────────────────────────────────────────
+updateTextLabels();
+renderAudioList();
+loadCounter();
 </script>
+
 </body>
 </html>
