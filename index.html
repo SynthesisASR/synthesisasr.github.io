@@ -670,51 +670,89 @@ document.getElementById("addRecSlotBtn").addEventListener("click", () => {
 
 // ─── Upload to S3 ─────────────────────────────────────────────────────────────
 document.getElementById("uploadAudioBtn").addEventListener("click", async () => {
-  const statusEl   = document.getElementById("audioStatus");
-  const btn        = document.getElementById("uploadAudioBtn");
+  const statusEl  = document.getElementById("audioStatus");
+  const btn       = document.getElementById("uploadAudioBtn");
   const progressEl = document.getElementById("uploadProgress");
-  const barEl      = document.getElementById("uploadBar");
+  const barEl     = document.getElementById("uploadBar");
   statusEl.textContent = ""; statusEl.className = "status-msg";
 
   const details = collectDetails(); if (!details) return;
-  const toUpload = recSlots.filter(s => s.blob);
+
+  const sentences = getAudioSentences();
+  const toUpload  = sentences
+    .map((_, i) => ({ i, blob: recState[i]?.blob }))
+    .filter(r => r.blob);
+
   if (!toUpload.length) { alert("No recordings to upload yet."); return; }
 
-  btn.disabled = true; progressEl.classList.add("visible"); barEl.style.width = "0%";
-  let done = 0, errors = [];
+  btn.disabled = true;
+  progressEl.classList.add("visible");
+  barEl.style.width = "0%";
+  statusEl.textContent = "Getting upload URLs…";
 
-  for (const slot of toUpload) {
-    statusEl.textContent = `Uploading ${done + 1} / ${toUpload.length}…`;
-    // grab optional label from the slot's input
-    const label = document.getElementById(`slot-${slot.id}`)
-                    ?.querySelector(".rec-label-input")?.value.trim() || "";
-    try {
-      const urlRes = await fetch(GET_UPLOAD_URL_EP, {
-        method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          submission_id: details.submission_id,
-          slot_index:    recSlots.indexOf(slot),
-          label,                                    // optional, may be empty
-          content_type:  slot.blob.type || "audio/webm"
-        })
-      });
-      if (!urlRes.ok) throw new Error(await urlRes.text());
-      const { upload_url } = await urlRes.json();
-      const put = await fetch(upload_url, {
-        method: "PUT", body: slot.blob,
-        headers: { "Content-Type": slot.blob.type || "audio/webm" }
-      });
-      if (!put.ok) throw new Error(`S3 HTTP ${put.status}`);
-      done++;
-      barEl.style.width = `${Math.round(done / toUpload.length * 100)}%`;
-    } catch(e) { errors.push(e.message); console.error(e); }
+  try {
+    // ── Step 1: get presigned URLs for all files at once ──────────────────
+    const presignRes = await fetch(PRESIGN_ENDPOINT, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        submission_id: details.submission_id,
+        files: toUpload.map(r => ({
+          ext:  r.blob.type.includes("wav")  ? "wav"
+              : r.blob.type.includes("mp3")  ? "mp3"
+              : "webm",
+          size: r.blob.size
+        }))
+      })
+    });
+    if (!presignRes.ok) throw new Error(await presignRes.text());
+    const { presigns } = await presignRes.json();
+
+    // ── Step 2: upload each blob via presigned POST (FormData) ────────────
+    const uploadedKeys = [];
+    for (let j = 0; j < toUpload.length; j++) {
+      statusEl.textContent = `Uploading ${j + 1} / ${toUpload.length}…`;
+      const { blob }            = toUpload[j];
+      const { key, upload }     = presigns[j];  // upload = { url, fields }
+
+      const form = new FormData();
+      Object.entries(upload.fields).forEach(([k, v]) => form.append(k, v));
+      form.append("file", blob);  // must be last
+
+      const put = await fetch(upload.url, { method: "POST", body: form });
+      if (!put.ok) throw new Error(`S3 upload failed (HTTP ${put.status})`);
+
+      uploadedKeys.push(key);
+      barEl.style.width = `${Math.round((j + 1) / toUpload.length * 100)}%`;
+    }
+
+    // ── Step 3: confirm with submit_audio so metadata is saved ───────────
+    statusEl.textContent = "Saving metadata…";
+    const submitRes = await fetch(SUBMIT_AUDIO_ENDPOINT, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        submission_id: details.submission_id,
+        email:         details.email,
+        occupation:    details.occupation,
+        university:    details.university,
+        audio_keys:    uploadedKeys,
+        timestamp:     new Date().toISOString()
+      })
+    });
+    if (!submitRes.ok) throw new Error(await submitRes.text());
+
+    statusEl.textContent = `✓ ${uploadedKeys.length} recording${uploadedKeys.length > 1 ? 's' : ''} uploaded — thank you!`;
+    statusEl.className = "status-msg ok";
+    loadCounter();
+
+  } catch(e) {
+    statusEl.textContent = "✗ Upload failed — please try again.";
+    statusEl.className = "status-msg err";
+    console.error(e);
+  } finally {
+    btn.disabled = false;
   }
-
-  statusEl.textContent = errors.length === 0
-    ? `✓ ${done} recording${done > 1 ? 's' : ''} uploaded — thank you!`
-    : `⚠ ${done} uploaded, ${errors.length} failed. Check console.`;
-  statusEl.className = errors.length === 0 ? "status-msg ok" : "status-msg err";
-  btn.disabled = false;
 });
 
 // ─── Details ──────────────────────────────────────────────────────────────────
