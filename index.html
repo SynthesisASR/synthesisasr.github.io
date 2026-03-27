@@ -450,7 +450,8 @@ select option{background:#111118;}
 const API_BASE             = "https://oz3199725j.execute-api.eu-central-1.amazonaws.com";
 const SUBMIT_TEXT_ENDPOINT = API_BASE + "/submit_text";
 const GET_COUNT_ENDPOINT   = API_BASE + "/get_count";
-const GET_UPLOAD_URL_EP    = API_BASE + "/get_upload_url"; // POST → { upload_url }
+const PRESIGN_ENDPOINT      = API_BASE + "/presign";        // ← new
+const SUBMIT_AUDIO_ENDPOINT = API_BASE + "/submit_audio";   // ← new
 
 // ─── Submission ID ────────────────────────────────────────────────────────────
 function makeId() {
