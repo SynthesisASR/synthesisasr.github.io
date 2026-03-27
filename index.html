@@ -432,10 +432,6 @@ function formatTime(totalSeconds) {
 }
 
 function blobExt(blob) {
-  const t = blob.type || "";
-  if (t.includes("webm")) return "webm";
-  if (t.includes("wav")) return "wav";
-  if (t.includes("mp3")) return "mp3";
   return "webm";
 }
 
