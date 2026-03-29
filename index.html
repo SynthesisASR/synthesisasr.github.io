@@ -754,7 +754,8 @@ async function startRecording() {
       recordingSeconds = 0;
     
       renderAudioList();
-    };
+    }
+    
     catch (err) {
     if (currentStream) {
       currentStream.getTracks().forEach(track => track.stop());
