@@ -69,17 +69,53 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 .demo-table tbody tr:last-child td{border-bottom:none;}
 .demo-table tbody tr{transition:background .2s;}
 .demo-table tbody tr:hover{background:rgba(255,255,255,.025);}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;font-size:.78rem;font-family:'JetBrains Mono',monospace;}
-.pill.wrong {
-  background: red !important;
-  border: 2px solid yellow !important;
-  color: white !important;
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid transparent;
+  background: rgba(255,255,255,.03); /* subtle base */
 }
-.pill.enhanced{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);color:var(--accent2);}
+
+/* .pill.wrong {
+  background: rgba(248,113,113,.08) !important;
+  border: 1px solid rgba(248,113,113,.25) !important;
+  color: #f87171 !important;
+  box-shadow: 0 0 0 1px rgba(248,113,113,.05) !important;
+} */
+
+.pill.wrong {
+  background: rgba(248,113,113,.08);
+  border: 1px solid rgba(248,113,113,.25);
+  color: #f87171;
+  box-shadow: 0 0 0 1px rgba(248,113,113,.05);
+}
+.pill.enhanced {
+  background: rgba(52,211,153,.08);
+  border: 1px solid rgba(52,211,153,.25);
+  color: var(--accent2);
+  box-shadow: 0 0 0 1px rgba(52,211,153,.05);
+}
+  
 .pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
-.transcription{font-family:'JetBrains Mono',monospace;font-size:.9rem;}
-.transcription.wrong{color:#f87171;}
-.transcription.right{color:var(--accent2);}
+.transcription {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .9rem;
+}
+
+.transcription.wrong {
+  color: #f87171;
+  text-shadow: 0 0 6px rgba(248,113,113,.15); /* subtle glow */
+}
+
+.transcription.right {
+  color: var(--accent2);
+  text-shadow: 0 0 6px rgba(52,211,153,.15);
+}
 audio{width:190px;height:30px;opacity:.85;}
 .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);margin:52px 0;}
 
