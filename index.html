@@ -716,43 +716,46 @@ async function startRecording() {
         currentStream.getTracks().forEach(track => track.stop());
         currentStream = null;
       }
-
+    
       clearInterval(timerInterval);
       timerInterval = null;
-
+    
       const actualMimeType = mediaRecorder?.mimeType || selectedMimeType || "";
       const blob = new Blob(currentChunks, {
         type: actualMimeType || "application/octet-stream"
       });
+    
+      // ✅ ADD THIS CHECK HERE
+      if (blob.size > 400000) {
+        alert("Please keep recordings short (under ~20 seconds)");
+        
+        // reset state but DO NOT save clip
+        mediaRecorder = null;
+        currentChunks = [];
+        recording = false;
+        recordingSeconds = 0;
+    
+        renderAudioList();
+        return;
+      }
+    
       const url = URL.createObjectURL(blob);
-
+    
       audioClips.push({
         blob,
         url,
         mimeType: actualMimeType || blob.type || "application/octet-stream",
         ext: extFromMimeType(actualMimeType || blob.type || "")
       });
-
+    
       mediaRecorder = null;
       currentChunks = [];
       recording = false;
       recordingSeconds = 0;
-
+    
       renderAudioList();
     };
-
-    mediaRecorder.start(100);
-
-    timerInterval = setInterval(() => {
-      recordingSeconds += 1;
-      const timerEl = document.getElementById("recTimer");
-      if (timerEl) timerEl.textContent = formatTime(recordingSeconds);
-    }, 1000);
-
-    setStatus(audioStatus, "");
-    renderAudioList();
-
-  } catch (err) {
+    catch (err) {
     if (currentStream) {
       currentStream.getTracks().forEach(track => track.stop());
       currentStream = null;
