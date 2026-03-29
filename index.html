@@ -70,10 +70,10 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 .demo-table tbody tr{transition:background .2s;}
 .demo-table tbody tr:hover{background:rgba(255,255,255,.025);}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;font-size:.78rem;font-family:'JetBrains Mono',monospace;}
-.pill.base {
-  background: rgba(248,113,113,.08);   /* soft red background */
+.pill.wrong {
+  background: rgba(248,113,113,.08);
   border: 1px solid rgba(248,113,113,.2);
-  color: #f87171;                      /* red text */
+  color: #f87171;
 }
 .pill.enhanced{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);color:var(--accent2);}
 .pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
@@ -236,7 +236,7 @@ select option{background:#111118;}
           </thead>
           <tbody>
             <tr>
-              <td><span class="pill base">Without domain vocabulary</span></td>
+              <td><span class="pill wrong">Without domain vocabulary</span></td>
               <td><audio controls preload="metadata"><source src="assets/audio/catalysis_great.wav" type="audio/wav"></audio></td>
               <td><span class="transcription wrong">atalisis is great</span></td>
             </tr>
