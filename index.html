@@ -725,7 +725,6 @@ async function startRecording() {
         type: actualMimeType || "application/octet-stream"
       });
 
-      // ✅ Size check
       if (blob.size > 400000) {
         alert("Please keep recordings short (under ~20 seconds)");
 
@@ -755,7 +754,18 @@ async function startRecording() {
       renderAudioList();
     };
 
-  } catch (err) {   // ✅ now correctly paired with try
+    mediaRecorder.start(100);
+
+    timerInterval = setInterval(() => {
+      recordingSeconds += 1;
+      const timerEl = document.getElementById("recTimer");
+      if (timerEl) timerEl.textContent = formatTime(recordingSeconds);
+    }, 1000);
+
+    setStatus(audioStatus, "");
+    renderAudioList();
+
+  } catch (err) {
     if (currentStream) {
       currentStream.getTracks().forEach(track => track.stop());
       currentStream = null;
