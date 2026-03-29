@@ -431,8 +431,42 @@ function formatTime(totalSeconds) {
   return `${m}:${String(s).padStart(2, "0")}`;
 }
 
+function getSupportedAudioMimeType() {
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg;codecs=opus",
+    "audio/ogg"
+  ];
+
+  for (const type of candidates) {
+    try {
+      if (window.MediaRecorder && MediaRecorder.isTypeSupported(type)) {
+        return type;
+      }
+    } catch (e) {
+      console.warn("MIME type check failed for:", type, e);
+    }
+  }
+
+  return "";
+}
+
+function extFromMimeType(mimeType = "") {
+  const t = mimeType.toLowerCase();
+
+  if (t.includes("webm")) return "webm";
+  if (t.includes("mp4")) return "mp4";
+  if (t.includes("ogg")) return "ogg";
+  if (t.includes("mpeg")) return "mp3";
+  if (t.includes("wav")) return "wav";
+
+  return "bin";
+}
+
 function blobExt(blob) {
-  return "webm";
+  return extFromMimeType(blob?.type || "");
 }
 
 function collectDetails() {
@@ -550,7 +584,12 @@ function renderAudioList() {
     item.innerHTML = `
       <div class="rec-item-header">
         <span class="rec-item-num">${index + 1}.</span>
-        <span class="rec-item-text">Recorded clip ${index + 1}</span>
+        <span class="rec-item-text">
+          Recorded clip ${index + 1}
+          <span style="color: var(--muted); font-size: .78rem;">
+            (${clip.ext?.toUpperCase() || "AUDIO"})
+          </span>
+        </span>
       </div>
       <div class="rec-item-controls">
         <audio class="rec-preview" controls src="${clip.url}"></audio>
@@ -598,13 +637,22 @@ function renderAudioList() {
 
 async function startRecording() {
   try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert("Audio recording is not supported in this browser.");
+      return;
+    }
+
+    if (!window.MediaRecorder) {
+      alert("MediaRecorder is not supported in this browser.");
+      return;
+    }
+
     currentStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-    const mimeType = ["audio/webm;codecs=opus", "audio/webm"]
-      .find(type => MediaRecorder.isTypeSupported(type));
+    const selectedMimeType = getSupportedAudioMimeType();
 
-    mediaRecorder = mimeType
-      ? new MediaRecorder(currentStream, { mimeType })
+    mediaRecorder = selectedMimeType
+      ? new MediaRecorder(currentStream, { mimeType: selectedMimeType })
       : new MediaRecorder(currentStream);
 
     currentChunks = [];
@@ -617,6 +665,11 @@ async function startRecording() {
       }
     };
 
+    mediaRecorder.onerror = (event) => {
+      console.error("MediaRecorder error:", event);
+      setStatus(audioStatus, "✗ Recording failed.", "err");
+    };
+
     mediaRecorder.onstop = () => {
       if (currentStream) {
         currentStream.getTracks().forEach(track => track.stop());
@@ -626,10 +679,18 @@ async function startRecording() {
       clearInterval(timerInterval);
       timerInterval = null;
 
-      const blob = new Blob(currentChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+      const actualMimeType = mediaRecorder?.mimeType || selectedMimeType || "";
+      const blob = new Blob(currentChunks, {
+        type: actualMimeType || "application/octet-stream"
+      });
       const url = URL.createObjectURL(blob);
 
-      audioClips.push({ blob, url });
+      audioClips.push({
+        blob,
+        url,
+        mimeType: actualMimeType || blob.type || "application/octet-stream",
+        ext: extFromMimeType(actualMimeType || blob.type || "")
+      });
 
       mediaRecorder = null;
       currentChunks = [];
@@ -647,10 +708,23 @@ async function startRecording() {
       if (timerEl) timerEl.textContent = formatTime(recordingSeconds);
     }, 1000);
 
+    setStatus(audioStatus, "");
     renderAudioList();
+
   } catch (err) {
-    alert("Microphone access denied. Please allow microphone access and try again.");
+    if (currentStream) {
+      currentStream.getTracks().forEach(track => track.stop());
+      currentStream = null;
+    }
+
+    recording = false;
+    recordingSeconds = 0;
+    clearInterval(timerInterval);
+    timerInterval = null;
+
+    alert("Microphone access denied or unavailable. Please allow microphone access and try again.");
     console.error("Recording error:", err);
+    renderAudioList();
   }
 }
 
@@ -679,7 +753,8 @@ async function submitAudio(details) {
       body: JSON.stringify({
         submission_id: details.submission_id,
         files: audioClips.map(clip => ({
-          ext: blobExt(clip.blob),
+          ext: clip.ext || blobExt(clip.blob),
+          mime_type: clip.mimeType || clip.blob.type || "application/octet-stream",
           size: clip.blob.size
         }))
       })
@@ -707,7 +782,10 @@ async function submitAudio(details) {
 
       const form = new FormData();
       Object.entries(upload.fields).forEach(([k, v]) => form.append(k, v));
-      form.append("file", clip.blob, `recording_${i + 1}.${blobExt(clip.blob)}`);
+
+      const ext = clip.ext || blobExt(clip.blob);
+      const filename = `recording_${i + 1}.${ext}`;
+      form.append("file", clip.blob, filename);
 
       const uploadRes = await fetch(upload.url, {
         method: "POST",
@@ -733,7 +811,14 @@ async function submitAudio(details) {
         email: details.email,
         occupation: details.occupation,
         university: details.university,
+        audio_files: uploadedKeys.map((key, i) => ({
+          key,
+          mime_type: audioClips[i].mimeType || audioClips[i].blob.type || "application/octet-stream",
+          ext: audioClips[i].ext || blobExt(audioClips[i].blob),
+          size: audioClips[i].blob.size
+        })),
         audio_keys: uploadedKeys,
+        mode: "audio",
         timestamp: new Date().toISOString()
       })
     });
@@ -743,7 +828,11 @@ async function submitAudio(details) {
       throw new Error(`submit_audio failed: ${txt}`);
     }
 
-    setStatus(audioStatus, `✓ ${uploadedKeys.length} recording${uploadedKeys.length > 1 ? "s" : ""} uploaded — thank you!`, "ok");
+    setStatus(
+      audioStatus,
+      `✓ ${uploadedKeys.length} recording${uploadedKeys.length > 1 ? "s" : ""} uploaded — thank you!`,
+      "ok"
+    );
     setStatus(document.getElementById("submitStatus"), "✓ Submitted — thank you!", "ok");
     loadCounter();
 
@@ -801,11 +890,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     }
 
   } catch (e) {
-    if (activeMode === "type") {
-      setStatus(submitStatus, `✗ Failed — ${e.message || e}`, "err");
-    } else {
-      setStatus(submitStatus, `✗ Failed — ${e.message || e}`, "err");
-    }
+    setStatus(submitStatus, `✗ Failed — ${e.message || e}`, "err");
     console.error("Submit error:", e);
   } finally {
     submitBtn.disabled = false;
